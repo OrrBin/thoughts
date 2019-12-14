@@ -1,4 +1,5 @@
 ![build status](https://travis-ci.com/OrrBin/thoughts.svg?branch=master)
+[![codecov](https://codecov.io/gh/OrrBin/thoughts/branch/master/graph/badge.svg)](https://codecov.io/gh/OrrBin/thoughts)
 
 # thoughts
 
