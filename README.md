@@ -1,3 +1,5 @@
+![build status](https://travis-ci.com/OrrBin/thoughts.svg?branch=master)
+
 # thoughts
 
 Advanced System Design project : Brain computer interface
