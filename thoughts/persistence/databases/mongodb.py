@@ -29,8 +29,8 @@ class MongoDB:
     def get_user_by_id(self, user_id):
         return self.users.find({'id': user_id})
 
-    def get_snapshot_by_id(self, user_id, snapshot_id):
-        return self.snapshots.find({'user_id': user_id}, {'snapshot_id': snapshot_id})
+    def get_snapshot_by_id(self, snapshot_id):
+        return self.snapshots.find({'snapshot_id': snapshot_id})
 
     def get_snapshot_by_user_id(self, user_id):
         return self.snapshots.find({'user_id': user_id})
@@ -45,3 +45,19 @@ class MongoDB:
 
         if type(data) == str:
             self.snapshots.insert_one({'name': topic, 'data': data})
+
+    def update_snapshot(self, snapshot_id, data, upsert=True):
+
+        updates = dict()
+        for (majorkey, majorSubDict) in data.items():
+            if majorkey == 'snapshot_id' or majorSubDict is str:
+                continue
+
+            updates[majorkey] = dict()
+            for (minorkey, minorSubDict) in majorSubDict.items():
+                updates[majorkey][minorkey] = minorSubDict
+
+        if type(data) == dict:
+            self.snapshots.update_one({'snapshot_id': snapshot_id}, {
+                '$set': updates
+            }, upsert=upsert)

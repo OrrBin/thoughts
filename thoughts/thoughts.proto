@@ -13,11 +13,21 @@ message User {
 }
 
 message Snapshot {
-    uint64 datetime = 1;
-    Pose pose = 2;
-    ColorImage color_image = 3;
-    DepthImage depth_image = 4;
-    Feelings feelings = 5;
+    string snapshot_id = 1;
+    uint64 datetime = 2;
+    Pose pose = 3;
+    ColorImage color_image = 4;
+    DepthImage depth_image = 5;
+    Feelings feelings = 6;
+}
+
+message EnrichedSnapshot {
+    string snapshot_id = 1;
+    uint64 datetime = 2;
+    Pose pose = 3;
+    EnrichedColorImage color_image = 4;
+    EnrichedDepthImage depth_image = 5;
+    Feelings feelings = 6;
 }
 
 message Pose {
@@ -39,10 +49,22 @@ message Pose {
 message ColorImage {
     uint32 width = 1;
     uint32 height = 2;
-    bytes data = 3;
+    string path = 3;
 }
 
 message DepthImage {
+    uint32 width = 1;
+    uint32 height = 2;
+    string path = 3;
+}
+
+message EnrichedColorImage {
+    uint32 width = 1;
+    uint32 height = 2;
+    bytes data = 3;
+}
+
+message EnrichedDepthImage {
     uint32 width = 1;
     uint32 height = 2;
     repeated float data = 3;
