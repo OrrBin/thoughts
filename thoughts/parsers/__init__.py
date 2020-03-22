@@ -20,7 +20,7 @@ def load_parsers():
         module = importlib.import_module(f'{root.name}.{file.stem}', package=root.name)
         for key, func in module.__dict__.items():
             if callable(func) and func.__name__.startswith("parse"):
-                config[func.field] = func
+                config[func.identifier] = func
 
 
 def parse(parser_name, raw_data):

@@ -16,4 +16,4 @@ def parse_feelings(snapshot_bytes):
     return feelings
 
 
-parse_feelings.field = 'feelings'
+parse_feelings.identifier = 'feelings'

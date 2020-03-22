@@ -25,4 +25,4 @@ def parse_pose(snapshot_bytes):
     return pose
 
 
-parse_pose.field = 'pose'
+parse_pose.identifier = 'pose'

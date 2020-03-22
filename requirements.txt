@@ -5,6 +5,8 @@ pika
 bson
 furl
 pymongo
+matplotlib
+numpy
 
 alabaster==0.7.12
 attrs==19.3.0

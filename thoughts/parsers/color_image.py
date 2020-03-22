@@ -34,4 +34,4 @@ def parse_color_image(snapshot_bytes):
     return dict(color_image=color_image)
 
 
-parse_color_image.field = 'color_image'
+parse_color_image.identifier = 'color_image'
