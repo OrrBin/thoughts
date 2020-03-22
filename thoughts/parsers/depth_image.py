@@ -1,16 +1,23 @@
 import json
+import datetime as dt
 
+from thoughts.core.context import Context
 from thoughts.serializers.protobuf_serializer import ProtoBufSerializer
 import numpy as np
 
 import matplotlib.pyplot as plt
 
-images_root_dir = '/home/user/thoughts/images'
+heatmaps_root_dir = '/home/user/thoughts/heatmaps'
 pbs = ProtoBufSerializer()
 
 
 def parse_depth_image(snapshot_bytes):
     snapshot = pbs.snapshot_decode(snapshot_bytes)
+
+    user_id = snapshot.user_id
+    snapshot_id = snapshot.snapshot_id
+    timestamp = snapshot.datetime
+    time_str = dt.datetime.fromtimestamp(timestamp / 1000).strftime("%d/%m/%y %H:%M:%S")
 
     raw_data_path = snapshot.depth_image.path
     width, height = snapshot.depth_image.width, snapshot.depth_image.height
@@ -21,23 +28,20 @@ def parse_depth_image(snapshot_bytes):
     data = json.loads(data)
     shaped = np.reshape(data, size)
 
-    # Create heatmap
-    # heatmap, xedges, yedges = np.histogram2d(shaped)
-    # extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+    ctx = Context(heatmaps_root_dir, user_id, snapshot_id)
+    heatmap_path = ctx.path('heatmap.png')
 
     # Plot heatmap
     plt.clf()
-    plt.title('heatmap')
+    plt.title(f'heatmap from {time_str}')
     plt.ylabel('y')
     plt.xlabel('x')
-    # plt.imshow(heatmap, extent=extent)
-    plt.imshow(shaped, cmap='hot', interpolation='nearest')
-    plt.show()
-
+    plt.imshow(shaped, interpolation='nearest')
+    plt.savefig(heatmap_path)
     depth_image = dict(
         width=width,
         height=height,
-        path=raw_data_path
+        path=heatmap_path
     )
 
     return dict(depth_image=depth_image)

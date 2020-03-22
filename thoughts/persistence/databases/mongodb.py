@@ -4,7 +4,7 @@ import pymongo
 # docker run -d -p 27017:27017 -v ~/data:/data/db mongo
 # docker run -d -p 27017:27017 mongo
 
-DB = "db"
+DB = "thoughts"
 USERS_COL = "users"
 SNAPSHOT_COL = "snapshots"
 
