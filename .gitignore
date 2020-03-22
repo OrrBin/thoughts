@@ -2,4 +2,4 @@
 .env/
 .pytest_cache/
 docs/build/
-./sample.mind.gz
+sample.mind.gz

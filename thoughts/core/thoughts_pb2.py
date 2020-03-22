@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='thoughts.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\x0ethoughts.proto\"\x84\x01\n\x04User\x12\x0f\n\x07user_id\x18\x01 \x01(\x04\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08\x62irthday\x18\x03 \x01(\r\x12\x1c\n\x06gender\x18\x04 \x01(\x0e\x32\x0c.User.Gender\")\n\x06Gender\x12\x08\n\x04MALE\x10\x00\x12\n\n\x06\x46\x45MALE\x10\x01\x12\t\n\x05OTHER\x10\x02\"\xa7\x01\n\x08Snapshot\x12\x13\n\x0bsnapshot_id\x18\x01 \x01(\t\x12\x10\n\x08\x64\x61tetime\x18\x02 \x01(\x04\x12\x13\n\x04pose\x18\x03 \x01(\x0b\x32\x05.Pose\x12 \n\x0b\x63olor_image\x18\x04 \x01(\x0b\x32\x0b.ColorImage\x12 \n\x0b\x64\x65pth_image\x18\x05 \x01(\x0b\x32\x0b.DepthImage\x12\x1b\n\x08\x66\x65\x65lings\x18\x06 \x01(\x0b\x32\t.Feelings\"\xbf\x01\n\x10\x45nrichedSnapshot\x12\x13\n\x0bsnapshot_id\x18\x01 \x01(\t\x12\x10\n\x08\x64\x61tetime\x18\x02 \x01(\x04\x12\x13\n\x04pose\x18\x03 \x01(\x0b\x32\x05.Pose\x12(\n\x0b\x63olor_image\x18\x04 \x01(\x0b\x32\x13.EnrichedColorImage\x12(\n\x0b\x64\x65pth_image\x18\x05 \x01(\x0b\x32\x13.EnrichedDepthImage\x12\x1b\n\x08\x66\x65\x65lings\x18\x06 \x01(\x0b\x32\t.Feelings\"\xb8\x01\n\x04Pose\x12&\n\x0btranslation\x18\x01 \x01(\x0b\x32\x11.Pose.Translation\x12 \n\x08rotation\x18\x02 \x01(\x0b\x32\x0e.Pose.Rotation\x1a.\n\x0bTranslation\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\x1a\x36\n\x08Rotation\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\x12\t\n\x01w\x18\x04 \x01(\x01\"9\n\nColorImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04path\x18\x03 \x01(\t\"9\n\nDepthImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04path\x18\x03 \x01(\t\"A\n\x12\x45nrichedColorImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\x0c\"A\n\x12\x45nrichedDepthImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x03 \x03(\x02\"Q\n\x08\x46\x65\x65lings\x12\x0e\n\x06hunger\x18\x01 \x01(\x02\x12\x0e\n\x06thirst\x18\x02 \x01(\x02\x12\x12\n\nexhaustion\x18\x03 \x01(\x02\x12\x11\n\thappiness\x18\x04 \x01(\x02\x62\x06proto3')
+  serialized_pb=_b('\n\x0ethoughts.proto\"\x84\x01\n\x04User\x12\x0f\n\x07user_id\x18\x01 \x01(\x04\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08\x62irthday\x18\x03 \x01(\r\x12\x1c\n\x06gender\x18\x04 \x01(\x0e\x32\x0c.User.Gender\")\n\x06Gender\x12\x08\n\x04MALE\x10\x00\x12\n\n\x06\x46\x45MALE\x10\x01\x12\t\n\x05OTHER\x10\x02\"\xb8\x01\n\x08Snapshot\x12\x13\n\x0bsnapshot_id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x04\x12\x10\n\x08\x64\x61tetime\x18\x03 \x01(\x04\x12\x13\n\x04pose\x18\x04 \x01(\x0b\x32\x05.Pose\x12 \n\x0b\x63olor_image\x18\x05 \x01(\x0b\x32\x0b.ColorImage\x12 \n\x0b\x64\x65pth_image\x18\x06 \x01(\x0b\x32\x0b.DepthImage\x12\x1b\n\x08\x66\x65\x65lings\x18\x07 \x01(\x0b\x32\t.Feelings\"\xaa\x01\n\x10\x45nrichedSnapshot\x12\x10\n\x08\x64\x61tetime\x18\x01 \x01(\x04\x12\x13\n\x04pose\x18\x02 \x01(\x0b\x32\x05.Pose\x12(\n\x0b\x63olor_image\x18\x03 \x01(\x0b\x32\x13.EnrichedColorImage\x12(\n\x0b\x64\x65pth_image\x18\x04 \x01(\x0b\x32\x13.EnrichedDepthImage\x12\x1b\n\x08\x66\x65\x65lings\x18\x05 \x01(\x0b\x32\t.Feelings\"\xb8\x01\n\x04Pose\x12&\n\x0btranslation\x18\x01 \x01(\x0b\x32\x11.Pose.Translation\x12 \n\x08rotation\x18\x02 \x01(\x0b\x32\x0e.Pose.Rotation\x1a.\n\x0bTranslation\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\x1a\x36\n\x08Rotation\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\x12\t\n\x01w\x18\x04 \x01(\x01\"9\n\nColorImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04path\x18\x03 \x01(\t\"9\n\nDepthImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04path\x18\x03 \x01(\t\"A\n\x12\x45nrichedColorImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\x0c\"A\n\x12\x45nrichedDepthImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x03 \x03(\x02\"Q\n\x08\x46\x65\x65lings\x12\x0e\n\x06hunger\x18\x01 \x01(\x02\x12\x0e\n\x06thirst\x18\x02 \x01(\x02\x12\x12\n\nexhaustion\x18\x03 \x01(\x02\x12\x11\n\thappiness\x18\x04 \x01(\x02\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -120,36 +120,43 @@ _SNAPSHOT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='datetime', full_name='Snapshot.datetime', index=1,
+      name='user_id', full_name='Snapshot.user_id', index=1,
       number=2, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='pose', full_name='Snapshot.pose', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='datetime', full_name='Snapshot.datetime', index=2,
+      number=3, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='color_image', full_name='Snapshot.color_image', index=3,
+      name='pose', full_name='Snapshot.pose', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='depth_image', full_name='Snapshot.depth_image', index=4,
+      name='color_image', full_name='Snapshot.color_image', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='feelings', full_name='Snapshot.feelings', index=5,
+      name='depth_image', full_name='Snapshot.depth_image', index=5,
       number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='feelings', full_name='Snapshot.feelings', index=6,
+      number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -167,7 +174,7 @@ _SNAPSHOT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=154,
-  serialized_end=321,
+  serialized_end=338,
 )
 
 
@@ -179,43 +186,36 @@ _ENRICHEDSNAPSHOT = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='snapshot_id', full_name='EnrichedSnapshot.snapshot_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='datetime', full_name='EnrichedSnapshot.datetime', index=1,
-      number=2, type=4, cpp_type=4, label=1,
+      name='datetime', full_name='EnrichedSnapshot.datetime', index=0,
+      number=1, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='pose', full_name='EnrichedSnapshot.pose', index=2,
+      name='pose', full_name='EnrichedSnapshot.pose', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='color_image', full_name='EnrichedSnapshot.color_image', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='color_image', full_name='EnrichedSnapshot.color_image', index=3,
+      name='depth_image', full_name='EnrichedSnapshot.depth_image', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='depth_image', full_name='EnrichedSnapshot.depth_image', index=4,
+      name='feelings', full_name='EnrichedSnapshot.feelings', index=4,
       number=5, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='feelings', full_name='EnrichedSnapshot.feelings', index=5,
-      number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -232,8 +232,8 @@ _ENRICHEDSNAPSHOT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=324,
-  serialized_end=515,
+  serialized_start=341,
+  serialized_end=511,
 )
 
 
@@ -277,8 +277,8 @@ _POSE_TRANSLATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=600,
-  serialized_end=646,
+  serialized_start=596,
+  serialized_end=642,
 )
 
 _POSE_ROTATION = _descriptor.Descriptor(
@@ -328,8 +328,8 @@ _POSE_ROTATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=648,
-  serialized_end=702,
+  serialized_start=644,
+  serialized_end=698,
 )
 
 _POSE = _descriptor.Descriptor(
@@ -365,8 +365,8 @@ _POSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=518,
-  serialized_end=702,
+  serialized_start=514,
+  serialized_end=698,
 )
 
 
@@ -410,8 +410,8 @@ _COLORIMAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=704,
-  serialized_end=761,
+  serialized_start=700,
+  serialized_end=757,
 )
 
 
@@ -455,8 +455,8 @@ _DEPTHIMAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=763,
-  serialized_end=820,
+  serialized_start=759,
+  serialized_end=816,
 )
 
 
@@ -500,8 +500,8 @@ _ENRICHEDCOLORIMAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=822,
-  serialized_end=887,
+  serialized_start=818,
+  serialized_end=883,
 )
 
 
@@ -545,8 +545,8 @@ _ENRICHEDDEPTHIMAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=889,
-  serialized_end=954,
+  serialized_start=885,
+  serialized_end=950,
 )
 
 
@@ -597,8 +597,8 @@ _FEELINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=956,
-  serialized_end=1037,
+  serialized_start=952,
+  serialized_end=1033,
 )
 
 _USER.fields_by_name['gender'].enum_type = _USER_GENDER

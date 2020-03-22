@@ -14,20 +14,20 @@ message User {
 
 message Snapshot {
     string snapshot_id = 1;
-    uint64 datetime = 2;
-    Pose pose = 3;
-    ColorImage color_image = 4;
-    DepthImage depth_image = 5;
-    Feelings feelings = 6;
+    uint64 user_id = 2;
+    uint64 datetime = 3;
+    Pose pose = 4;
+    ColorImage color_image = 5;
+    DepthImage depth_image = 6;
+    Feelings feelings = 7;
 }
 
 message EnrichedSnapshot {
-    string snapshot_id = 1;
-    uint64 datetime = 2;
-    Pose pose = 3;
-    EnrichedColorImage color_image = 4;
-    EnrichedDepthImage depth_image = 5;
-    Feelings feelings = 6;
+    uint64 datetime = 1;
+    Pose pose = 2;
+    EnrichedColorImage color_image = 3;
+    EnrichedDepthImage depth_image = 4;
+    Feelings feelings = 5;
 }
 
 message Pose {

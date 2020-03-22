@@ -12,11 +12,11 @@ class Saver:
     def save(self, topic, data):
         print(f'Saving for topic: {topic}')
         data = json.loads(data)
-        print(data)
+        # print(data)
         if topic == 'user':
             self.db.insert_user(data)
         else:
-            self.db.update_snapshot(data['snapshot_id'], data)
+            self.db.update_snapshot(data['snapshot_id'], data['data'])
 
     def run_saver(self, parser_name, mq_url):
         mq = init_queue(mq_url)

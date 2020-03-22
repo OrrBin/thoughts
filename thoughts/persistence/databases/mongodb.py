@@ -48,6 +48,8 @@ class MongoDB:
 
     def update_snapshot(self, snapshot_id, data, upsert=True):
 
+        print(data)
+
         updates = dict()
         for (majorkey, majorSubDict) in data.items():
             if majorkey == 'snapshot_id' or majorSubDict is str:
@@ -56,6 +58,8 @@ class MongoDB:
             updates[majorkey] = dict()
             for (minorkey, minorSubDict) in majorSubDict.items():
                 updates[majorkey][minorkey] = minorSubDict
+
+        print(updates)
 
         if type(data) == dict:
             self.snapshots.update_one({'snapshot_id': snapshot_id}, {

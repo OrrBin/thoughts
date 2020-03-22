@@ -5,7 +5,7 @@ from ..core.thoughts_pb2 import Snapshot
 from ..serializers.protobuf_serializer import ProtoBufSerializer
 from ..message_queues import init_queue
 
-from .context import Context
+from thoughts.core.context import Context
 from flask import Flask, request
 
 serv = Flask(__name__)
@@ -30,16 +30,16 @@ def post_snapshot():
     message_bytes = request.get_data()
     user, enriched_snapshot = protocol_encoder.message_decode(message_bytes)  # convert from bytes to pb objects
 
-    _create_id(enriched_snapshot)
+    snapshot_id = _create_id()
 
     color_image_data = enriched_snapshot.color_image.data
     depth_image_data = json.dumps(list(enriched_snapshot.depth_image.data))
 
-    context = Context(data_dir, user.user_id, enriched_snapshot.snapshot_id)
+    context = Context(data_dir, user.user_id, snapshot_id)
     color_image_path = context.save('color_image', color_image_data)
     depth_image_path = context.save('depth_image', depth_image_data)
 
-    snapshot = _flatten_snapshot(enriched_snapshot, color_image_path, depth_image_path)
+    snapshot = _flatten_snapshot(enriched_snapshot, snapshot_id, user.user_id, color_image_path, depth_image_path)
 
     if message_handler:  # run_server was invoked through API
         message_handler(message_bytes)
@@ -54,13 +54,14 @@ def post_snapshot():
     return "Success"
 
 
-def _create_id(snapshot):
-    snapshot.snapshot_id = str(uuid.uuid4())
+def _create_id():
+    return str(uuid.uuid4())
 
 
-def _flatten_snapshot(enriched_snapshot, color_image_path, depth_image_path):
+def _flatten_snapshot(enriched_snapshot, snapshot_id, user_id, color_image_path, depth_image_path):
     snapshot = Snapshot()
-    snapshot.snapshot_id = enriched_snapshot.snapshot_id
+    snapshot.snapshot_id = snapshot_id
+    snapshot.user_id = user_id
     snapshot.datetime = enriched_snapshot.datetime
     snapshot.pose.translation.x = enriched_snapshot.pose.translation.x
     snapshot.pose.translation.y = enriched_snapshot.pose.translation.y

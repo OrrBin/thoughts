@@ -1,5 +1,3 @@
-import json
-
 from thoughts.serializers.protobuf_serializer import ProtoBufSerializer
 
 pbs = ProtoBufSerializer()
