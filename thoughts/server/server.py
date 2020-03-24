@@ -2,7 +2,7 @@ import json
 import uuid
 
 from ..core.thoughts_pb2 import Snapshot
-from ..serializers.protobuf_serializer import ProtoBufSerializer
+from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 from ..message_queues import init_queue
 
 from thoughts.core.context import Context
@@ -12,7 +12,7 @@ serv = Flask(__name__)
 data_dir = '/home/user/thoughts/data'
 message_handler = None
 url = None
-protocol_encoder = ProtoBufSerializer()
+protobuf_encoder = ProtoBufSerializer()
 
 
 def run_server(host, port, publish=None, mq_url=None):
@@ -28,7 +28,7 @@ def run_server(host, port, publish=None, mq_url=None):
 @serv.route('/snapshot', methods=['POST'])
 def post_snapshot():
     message_bytes = request.get_data()
-    user, enriched_snapshot = protocol_encoder.message_decode(message_bytes)  # convert from bytes to pb objects
+    user, enriched_snapshot = protobuf_encoder.message_decode(message_bytes)  # convert from bytes to pb objects
 
     snapshot_id = _create_id()
 
@@ -45,17 +45,22 @@ def post_snapshot():
         message_handler(message_bytes)
         return ""  # return status code 200
 
-    print(snapshot)
-
     mq = init_queue(url)
-    mq.publish('snapshot', protocol_encoder.snapshot_encode(snapshot))
-
-    print("Finished!")
+    mq.publish('snapshot', protobuf_encoder.snapshot_encode(snapshot))
+    mq.publish('user', _user_json(user))
     return "Success"
 
 
 def _create_id():
     return str(uuid.uuid4())
+
+
+def _user_json(user):
+    return json.dumps(dict(
+        user_id=user.user_id,
+        username=user.username,
+        birthday=user.birthday
+    ))
 
 
 def _flatten_snapshot(enriched_snapshot, snapshot_id, user_id, color_image_path, depth_image_path):

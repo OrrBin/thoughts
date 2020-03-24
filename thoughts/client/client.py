@@ -1,6 +1,6 @@
 import requests
-from ..file_reader.file_reader import FileReader
-from ..serializers.protobuf_serializer import ProtoBufSerializer
+from thoughts.utils.file_reader import FileReader
+from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 
 encoder = ProtoBufSerializer()
 

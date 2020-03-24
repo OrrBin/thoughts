@@ -1,4 +1,4 @@
-from thoughts.serializers.protobuf_serializer import ProtoBufSerializer
+from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 
 pbs = ProtoBufSerializer()
 

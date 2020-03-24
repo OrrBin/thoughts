@@ -1,7 +1,7 @@
 from PIL import Image
 
 from thoughts.core.context import Context
-from thoughts.serializers.protobuf_serializer import ProtoBufSerializer
+from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 
 images_root_dir = '/home/user/thoughts/images'
 pbs = ProtoBufSerializer()

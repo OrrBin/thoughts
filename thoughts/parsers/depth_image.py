@@ -2,7 +2,7 @@ import json
 import datetime as dt
 
 from thoughts.core.context import Context
-from thoughts.serializers.protobuf_serializer import ProtoBufSerializer
+from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -21,7 +21,7 @@ def parse_depth_image(snapshot_bytes):
 
     raw_data_path = snapshot.depth_image.path
     width, height = snapshot.depth_image.width, snapshot.depth_image.height
-    size = (width, height)
+    size = (height, width)
     with open(raw_data_path, 'r') as f:
         data = f.read()
 

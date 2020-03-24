@@ -1,8 +1,6 @@
 import pymongo
 
-# docker run -d mongo
 # docker run -d -p 27017:27017 -v ~/data:/data/db mongo
-# docker run -d -p 27017:27017 mongo
 
 DB = "thoughts"
 USERS_COL = "users"
@@ -36,30 +34,27 @@ class MongoDB:
         return self.snapshots.find({'user_id': user_id})
 
     # Updates
-    def insert_user(self, user):
-        self.users.insert_one(user)
-
-    def insert_snapshot(self, topic, data):
-        if type(data) == dict:
-            self.snapshots.insert_one({'topic': topic, **data})
-
-        if type(data) == str:
-            self.snapshots.insert_one({'name': topic, 'data': data})
+    def update_user(self, user, upsert=True):
+        print(user)
+        self.users.update_one({'user_id': user['user_id']}, {
+                '$set': user
+            }, upsert=upsert)
 
     def update_snapshot(self, snapshot_id, data, upsert=True):
-
-        print(data)
-
         updates = dict()
         for (majorkey, majorSubDict) in data.items():
-            if majorkey == 'snapshot_id' or majorSubDict is str:
-                continue
+            if not isinstance(majorSubDict, dict):
+                updates[majorkey] = majorSubDict
 
-            updates[majorkey] = dict()
-            for (minorkey, minorSubDict) in majorSubDict.items():
-                updates[majorkey][minorkey] = minorSubDict
+        fields = data['data']
+        for (majorkey, majorSubDict) in fields.items():
+            if not isinstance(majorSubDict, dict):
+                updates[majorkey] = majorSubDict
 
-        print(updates)
+            else:
+                updates[majorkey] = dict()
+                for (minorkey, minorSubDict) in majorSubDict.items():
+                    updates[majorkey][minorkey] = minorSubDict
 
         if type(data) == dict:
             self.snapshots.update_one({'snapshot_id': snapshot_id}, {

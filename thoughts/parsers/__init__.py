@@ -5,7 +5,7 @@ from pathlib import Path
 from threading import Thread
 
 from thoughts.message_queues import init_queue
-from thoughts.serializers.protobuf_serializer import ProtoBufSerializer
+from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 
 config = {}
 pbs = ProtoBufSerializer()
@@ -36,6 +36,8 @@ def run_parser(parser_name, mq_url):
         snapshot = pbs.snapshot_decode(body)
         result = dict(
             snapshot_id=snapshot.snapshot_id,
+            user_id=snapshot.user_id,
+            timestamp=snapshot.datetime,
             data=result
         )
 
