@@ -25,12 +25,12 @@ class MongoDB:
         return self.users.find()
 
     def get_user_by_id(self, user_id):
-        return self.users.find({'id': user_id})
+        return self.users.find_one({'user_id': user_id})
 
-    def get_snapshot_by_id(self, snapshot_id):
-        return self.snapshots.find({'snapshot_id': snapshot_id})
+    def get_snapshot_by_id(self, user_id, snapshot_id):
+        return self.snapshots.find_one({'user_id': user_id, 'snapshot_id': snapshot_id})
 
-    def get_snapshot_by_user_id(self, user_id):
+    def get_snapshots_by_user_id(self, user_id):
         return self.snapshots.find({'user_id': user_id})
 
     # Updates

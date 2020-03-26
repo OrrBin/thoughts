@@ -59,7 +59,8 @@ def _user_json(user):
     return json.dumps(dict(
         user_id=user.user_id,
         username=user.username,
-        birthday=user.birthday
+        birthday=user.birthday,
+        gender=user.gender
     ))
 
 
