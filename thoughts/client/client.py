@@ -9,9 +9,11 @@ def upload_sample(host, port, path="sample.mind.gz"):
     reader = FileReader(path)
 
     user = reader.get_user()
-    snapshot = reader.get_enriched_snapshot()
-    address = f'http://{host}:{port}/snapshot'
-    r = requests.post(url=address, data=encoder.message_encode(user, snapshot))
+    for i in range (1,2):
+        snapshot = reader.get_enriched_snapshot()
+        address = f'http://{host}:{port}/snapshot'
+        r = requests.post(url=address, data=encoder.message_encode(user, snapshot))
+        if r.status_code != 200:
+            print(f'snapshot {i} failed to send')
 
-    if r.status_code == 200:
-        print(f'Snapshot was sent unsuccessfully')
+    print(f'Snapshots was sent unsuccessfully')

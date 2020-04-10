@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, send_file
+from flask_cors import CORS
 from thoughts.persistence.databases import init_database
 
 api_server = Flask(__name__)
+CORS(api_server)
 db = None
 
 
@@ -15,14 +17,14 @@ def run_api_server(host, port, database_url):
 @api_server.route('/users', methods=['GET'])
 def get_users():
     users = db.get_users()
-    users = [{'user_id': user['user_id'], 'username': user['username']} for user in users]
+    users = [{'userId': user['user_id'], 'username': user['username']} for user in users]
     return jsonify(users)
 
 
 @api_server.route('/users/<int:user_id>')
 def get_user_by_id(user_id):
     user = db.get_user_by_id(user_id)
-    user = {'user_id': user['user_id'], 'username': user['username'], 'birthday': user['birthday'],
+    user = {'userId': user['user_id'], 'username': user['username'], 'birthday': user['birthday'],
             'gender': user['gender']}
     return jsonify(user)
 
@@ -30,7 +32,7 @@ def get_user_by_id(user_id):
 @api_server.route('/users/<int:user_id>/snapshots')
 def get_snapshots_by_user_id(user_id):
     snapshots = db.get_snapshots_by_user_id(user_id)
-    snapshots = [{'snapshot_id': snapshot['snapshot_id'], 'date': snapshot['timestamp']}
+    snapshots = [{'snapshotId': snapshot['snapshot_id'], 'date': snapshot['timestamp']}
                  for snapshot in snapshots]
     return jsonify(snapshots)
 

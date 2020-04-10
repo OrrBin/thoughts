@@ -27,6 +27,7 @@ def run_server(host, port, publish=None, mq_url=None):
 
 @serv.route('/snapshot', methods=['POST'])
 def post_snapshot():
+    print('got post request')
     message_bytes = request.get_data()
     user, enriched_snapshot = protobuf_encoder.message_decode(message_bytes)  # convert from bytes to pb objects
 

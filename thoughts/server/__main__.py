@@ -1,3 +1,4 @@
+import os
 import click
 from thoughts.server import server
 
@@ -11,8 +12,11 @@ def cli():
 @click.option('-h', '--host', default='127.0.0.1')
 @click.option('-p', '--port', default='8000')
 def run_server(host, port):
+
+    mq_url = os.getenv('MQ_URL', 'rabbitmq://127.0.0.1:5672')
     try:
-        server.run_server(host, port, mq_url="rabbitmq://127.0.0.1:5672")
+        print(f'mq url is: {mq_url}')
+        server.run_server(host, port, mq_url=mq_url)
     except Exception as error:
         print(f'ERROR: {error}')
 
