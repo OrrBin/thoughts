@@ -1,3 +1,5 @@
+import os
+
 import click
 from . import parse as parse_data
 from . import run_parser as register_parser
@@ -26,7 +28,8 @@ def run_parser(parser_name, mq_url):
 
 @cli.command()
 def run_parsers():
-    run_all_parsers('rabbitmq://127.0.0.1:5672')
+    mq_url = os.getenv('MQ_URL', 'rabbitmq://127.0.0.1:5672')
+    run_all_parsers(mq_url)
 
 
 if __name__ == '__main__':

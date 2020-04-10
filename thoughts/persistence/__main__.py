@@ -1,3 +1,5 @@
+import os
+
 import click
 from thoughts.persistence.saver import Saver
 
@@ -20,6 +22,11 @@ def save(database, topic, data):
 @click.option('-d', '--db_url', default='mongodb://127.0.0.1:27017')
 @click.option('-m', '--mq_url', default='rabbitmq://127.0.0.1:5672')
 def run_saver(db_url, mq_url):
+    # If env variable is defined use it
+    mq_url = os.getenv('MQ_URL', mq_url)
+    # If env variable is defined use it
+    db_url = os.getenv('DB_URL', db_url)
+
     saver = Saver(db_url)
     saver.run_all_savers(mq_url)
 
