@@ -5,5 +5,5 @@ ADD thoughts thoughts
 EXPOSE 8000
 
 ENV MQ_URL rabbitmq://127.0.0.1:5672
-
+ENV PARSER all
 CMD ["python", "-m", "thoughts.parsers", "run-parsers"]

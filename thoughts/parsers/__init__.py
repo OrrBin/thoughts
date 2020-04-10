@@ -56,6 +56,12 @@ def run_all_parsers(mq_url):
         print(f'Parser {parser_name} is activated')
 
 
+def run_one_parser(parser_name, mq_url):
+    t = Thread(target=run_parser, args=(parser_name, mq_url))
+    t.start()
+    print(f'Parser {parser_name} is activated')
+
+
 def get_available_parsers():
     return list(config.keys())
 
