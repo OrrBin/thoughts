@@ -6,6 +6,11 @@ from threading import Thread
 
 
 class Saver:
+    """
+    Saver for user and snapshot data.
+    Relies on database driver, creating one using the database_url
+    Consumes message queue for snapshots and user updates
+    """
     def __init__(self, database_url):
         self.db = init_database(database_url)
 

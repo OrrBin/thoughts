@@ -8,6 +8,9 @@ SNAPSHOT_COL = "snapshots"
 
 
 class MongoDB:
+    """
+    Driver for MongoDB
+    """
     prefix = 'mongodb'
 
     def __init__(self, host, port):
@@ -35,7 +38,6 @@ class MongoDB:
 
     # Updates
     def update_user(self, user, upsert=True):
-        print(user)
         self.users.update_one({'user_id': user['user_id']}, {
                 '$set': user
             }, upsert=upsert)

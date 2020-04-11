@@ -4,6 +4,9 @@ pbs = ProtoBufSerializer()
 
 
 def parse_feelings(snapshot_bytes):
+    """
+    Parsing feelings data from snapshot
+    """
     snapshot = pbs.snapshot_decode(snapshot_bytes)
     feelings = dict(
         hunger=snapshot.feelings.hunger,

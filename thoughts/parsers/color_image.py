@@ -8,6 +8,9 @@ pbs = ProtoBufSerializer()
 
 
 def parse_color_image(snapshot_bytes):
+    """
+    Parsing color image data from snapshot. The image data itself is stored on disk, and the metadata returned
+    """
     snapshot = pbs.snapshot_decode(snapshot_bytes)
 
     user_id = snapshot.user_id

@@ -4,6 +4,9 @@ pbs = ProtoBufSerializer()
 
 
 def parse_pose(snapshot_bytes):
+    """
+    Parsing pose data from snapshot
+    """
     snapshot = pbs.snapshot_decode(snapshot_bytes)
     rotation = dict(
         x=snapshot.pose.rotation.x,

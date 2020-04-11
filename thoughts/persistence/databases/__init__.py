@@ -7,6 +7,18 @@ config = {}
 
 
 def load_databases():
+    """
+    Collects database drivers and registers them.
+    Registers according to their prefix attribute.
+    For example for drivers with prefix attribute equals to mongodb
+    It would be registered under mongodb.
+
+    To add a new driver add a file, with name that end with db.py, implement the driver and add prefix attribute
+    with the specific message queue type.
+    The driver must implement the all the functions that mongodb.py implements
+
+    And have a constructor accepting: host, port
+    """
     root = Path("thoughts/persistence/databases").absolute()
     sys.path.insert(0, str(root.parent))
     for file in root.iterdir():

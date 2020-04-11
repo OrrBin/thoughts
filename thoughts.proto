@@ -12,6 +12,10 @@ message User {
     Gender gender = 4;
 }
 
+/**
+  Snapshot that contains images with only the path to the images data.
+  Meant to be sent between microservices to reduce traffic on the network
+ */
 message Snapshot {
     string snapshot_id = 1;
     uint64 user_id = 2;
@@ -22,7 +26,11 @@ message Snapshot {
     Feelings feelings = 7;
 }
 
-message EnrichedSnapshot {
+/**
+  Snapshot that contains images with the data itself.
+  Meant to be sent from the client to reduce format coplexity
+ */
+message EnrichedSnapshot
     uint64 datetime = 1;
     Pose pose = 2;
     EnrichedColorImage color_image = 3;

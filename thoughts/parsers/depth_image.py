@@ -12,6 +12,9 @@ pbs = ProtoBufSerializer()
 
 
 def parse_depth_image(snapshot_bytes):
+    """
+    Parsing depth image data from snapshot. The image data itself is stored on disk, and the metadata returned
+    """
     snapshot = pbs.snapshot_decode(snapshot_bytes)
 
     user_id = snapshot.user_id
