@@ -1,5 +1,7 @@
 import gzip
 import struct
+import traceback
+
 from thoughts.core.thoughts_pb2 import User, Snapshot, EnrichedSnapshot
 
 UINT_SIZE = 4
@@ -16,20 +18,39 @@ class ProtobufFileReader:
         self.stream = gzip.open(path, "rb")
 
     def _get_data(self):
-        size, = struct.unpack('I', self.stream.read(UINT_SIZE))
+        data = self.stream.read(UINT_SIZE)
+        if not data or len(data) == 0:
+            return None
+
+        # try:
+        size, = struct.unpack('I', data)
+        # except Exception as e:
+        #     track = traceback.format_exc()
+        #     print(track)
+        #     return None
+
         return self.stream.read(size)
 
     def get_user_information(self):
         user_snap = User()
-        user_snap.ParseFromString(self._get_data())
+        data = self._get_data()
+        if not data:
+            return None
+        user_snap.ParseFromString(data)
         return user_snap
 
     def get_snapshot(self):
         proto_snap = Snapshot()
-        proto_snap.ParseFromString(self._get_data())
+        data = self._get_data()
+        if not data:
+            return None
+        proto_snap.ParseFromString(data)
         return proto_snap
 
     def get_enriched_snapshot(self):
         proto_snap = EnrichedSnapshot()
-        proto_snap.ParseFromString(self._get_data())
+        data = self._get_data()
+        if not data:
+            return None
+        proto_snap.ParseFromString(data)
         return proto_snap

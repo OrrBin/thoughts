@@ -16,8 +16,6 @@ class Saver:
 
     def save_user(self, user):
         user = json.loads(user)
-        user_id = user['user_id']
-        print(f'Saving user {user_id}')
         self.db.update_user(user)
 
     def run_saver(self, parser_name, mq_url):

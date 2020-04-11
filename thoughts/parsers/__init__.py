@@ -12,6 +12,19 @@ pbs = ProtoBufSerializer()
 
 
 def load_parsers():
+    """
+    Collects parsers and registers them.
+    Registers all functions that ends with 'parse' according to their identifier attribute.
+    For example for parser with identifier attribute equals to color_image
+    It would be registered under color_image.
+
+    To add a new parser add a function, implement the parser and add identifier attribute
+    with the specific parser type.
+    The parser function must get one parameter, the snapshots bytes.
+
+    And must return dict with one element: {identifier: value}
+    Where value is the parsed value, and identifier is the parser identifier
+    """
     root = Path("thoughts/parsers").absolute()
     sys.path.insert(0, str(root.parent))
     for file in root.iterdir():
@@ -28,6 +41,12 @@ def parse(parser_name, raw_data):
 
 
 def run_parser(parser_name, mq_url):
+    """
+    Registering parser of the given name to listen to the message queue to incoming snapshots.
+    On each incoming snapshot, running the parser, enriching it's result and publishing to message queue
+    :param parser_name: parser name to run
+    :param mq_url: message queue to pubkish to
+    """
     mq = init_queue(mq_url)
 
     def handler(body):

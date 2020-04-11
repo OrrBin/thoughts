@@ -7,6 +7,20 @@ config = {}
 
 
 def load_message_queues():
+    """
+    Collects message queue handlers and registers them.
+    Registers according to their prefix attribute.
+    For example for handler with prefix attribute equals to rabbitmq
+    It would be registered under rabbitmq.
+
+    To add a new handler add a file, with name that end with mq.py, implement the handler and add prefix attribute
+    with the specific message queue type.
+    The handler must implement the functions:
+    publish(self, topic, message)
+    consume(self, topic, handler)
+
+    And have a constructor accepting: host, port
+    """
     root = Path("thoughts/message_queues").absolute()
     sys.path.insert(0, str(root.parent))
     for file in root.iterdir():
@@ -20,6 +34,11 @@ def load_message_queues():
 
 
 def init_queue(url):
+    """
+    Given a url, initiates a new message queue handler instance according to the url scheme
+    :param url: url of the message queue
+    :return: new message queue handler instance
+    """
     url = furl(url)
     prefix = url.scheme
     if prefix not in config:

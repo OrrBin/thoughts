@@ -16,6 +16,12 @@ protobuf_encoder = ProtoBufSerializer()
 
 
 def run_server(host, port, publish=None, mq_url=None):
+    """
+    Runs server that accepts snapshots, and distributes them to the given message queue.
+    The Server saves the heavy data to files on disk, to prevent overloading the queue and network.
+    :param publish: handler for messages. If not specified default behavior is to publish the message to the given queue
+    :param mq_url: url to a message queue of a supported type
+    """
     if publish:
         global message_handler
         message_handler = publish
@@ -66,6 +72,9 @@ def _user_json(user):
 
 
 def _flatten_snapshot(enriched_snapshot, snapshot_id, user_id, color_image_path, depth_image_path):
+    """
+    Gets an EnrichedSnapshot and create Snapshot object from it.
+    """
     snapshot = Snapshot()
     snapshot.snapshot_id = snapshot_id
     snapshot.user_id = user_id

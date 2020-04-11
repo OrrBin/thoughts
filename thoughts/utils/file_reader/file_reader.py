@@ -31,8 +31,10 @@ class FileReader:
         return f'Reader({path=}, user={self.user.username})'
 
     def __iter__(self):
-        while snapshot := self.format_reader.get_snapshot():
+        snapshot = self.format_reader.get_snapshot()
+        while snapshot:
             yield snapshot
+            snapshot = self.format_reader.get_enriched_snapshot()
 
     def close(self):
         self.format_reader.stream.close()

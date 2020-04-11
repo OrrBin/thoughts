@@ -4,7 +4,10 @@ app = Flask(__name__)
 
 
 def run_gui_server(host, port):
-    print('starting api...')
+    """
+    Run web server that serves the Thoughts app.
+    """
+    print('Serving Thoughts App...')
     app.run(host, int(port))
 
 
@@ -18,12 +21,6 @@ def static_proxy(path):
 @app.route('/')
 def root():
     return send_from_directory('./static', 'index.html')
-
-
-if __name__ == '__main__':
-    # This is used when running locally only. When deploying use a webserver process
-    # such as Gunicorn to serve the app.
-    app.run(host='127.0.0.1', port=8080, debug=True)
 
 
 @app.errorhandler(500)
