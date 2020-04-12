@@ -188,7 +188,7 @@ This command depends on docker-compose so make sure it is installed.
 The file `docker-compose.yml` defines the composition, and it uses `thoughts.env`
 to define global environment variables
  
- ##Extend the project
+## Extend the project
  
 ### Add another type of database driver
 To add support for another database driver following steps are needed:
