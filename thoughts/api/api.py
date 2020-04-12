@@ -48,6 +48,36 @@ def get_snapshot_by_id(user_id, snapshot_id):
     return jsonify(results)
 
 
+@api_server.route('/users/<int:user_id>/snapshots/<snapshot_id>/next')
+def get_next_snapshot(user_id, snapshot_id):
+    snapshots = db.get_snapshots_by_user_id(user_id)
+    snapshots = [{'snapshotId': snapshot['snapshot_id'], 'date': snapshot['timestamp']}
+                 for snapshot in snapshots]
+    snapshots = sorted(snapshots, key=lambda i: i['date'])
+    current_index = next((index for (index, d) in enumerate(snapshots) if d['snapshotId'] == snapshot_id), None)
+    if current_index is None:
+        return f'missing snapshot with id : {snapshot_id}', 400
+    if current_index == len(snapshots) - 1:
+        return f'last snapshot: {snapshot_id}', 400
+
+    return jsonify(snapshots[current_index + 1])
+
+
+@api_server.route('/users/<int:user_id>/snapshots/<snapshot_id>/prev')
+def get_prev_snapshot(user_id, snapshot_id):
+    snapshots = db.get_snapshots_by_user_id(user_id)
+    snapshots = [{'snapshotId': snapshot['snapshot_id'], 'date': snapshot['timestamp']}
+                 for snapshot in snapshots]
+    snapshots = sorted(snapshots, key=lambda i: i['date'])
+    current_index = next((index for (index, d) in enumerate(snapshots) if d['snapshotId'] == snapshot_id), None)
+    if not current_index:
+        return f'missing snapshot with id : {snapshot_id}', 400
+    if current_index == 0:
+        return f'first snapshot: {snapshot_id}', 400
+
+    return jsonify(snapshots[current_index - 1])
+
+
 @api_server.route('/users/<int:user_id>/snapshots/<snapshot_id>/<result_name>')
 def get_snapshot_result(user_id, snapshot_id, result_name):
     try:

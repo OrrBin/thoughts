@@ -1,0 +1,99 @@
+version: '3.3'
+
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    volumes:
+      - ~/data:/data/db mongo
+    networks:
+      - thoughts-net
+    ports:
+      - "27017:27017"
+
+  rabbitmq:
+    image: rabbitmq
+    networks:
+      - thoughts-net
+    ports:
+      - "5672:5672"
+    restart: always
+
+  server:
+    depends_on:
+      - rabbitmq
+    build:
+      context: .
+      dockerfile: ./Dockerfile-server
+    networks:
+      - thoughts-net
+    ports:
+      - "8000:8000"
+    restart: always
+    volumes:
+      - /home/user/thoughts/:/home/user/thoughts
+    env_file:
+      - thoughts.env
+
+  parser:
+    depends_on:
+      - rabbitmq
+    build:
+      context: .
+      dockerfile: ./Dockerfile-parsers
+    restart: always
+    volumes:
+      - ~/thoughts:/home/user/thoughts
+    networks:
+      - thoughts-net
+    env_file:
+      - thoughts.env
+
+  saver:
+    depends_on:
+      - rabbitmq
+      - mongodb
+    build:
+      context: .
+      dockerfile: ./Dockerfile-saver
+    restart: always
+    volumes:
+      - ~/thoughts:/home/user/thoughts
+    networks:
+      - thoughts-net
+    env_file:
+      - thoughts.env
+
+  api:
+    depends_on:
+      - mongodb
+    build:
+      context: .
+      dockerfile: ./Dockerfile-api
+    restart: always
+    volumes:
+      - ~/thoughts:/home/user/thoughts
+    networks:
+      - thoughts-net
+    ports:
+      - "5000:5000"
+    env_file:
+      - thoughts.env
+
+  gui:
+    depends_on:
+      - api
+    build:
+      context: .
+      dockerfile: ./Dockerfile-gui
+    restart: always
+    networks:
+      - thoughts-net
+    ports:
+      - "5555:5555"
+    env_file:
+      - thoughts.env
+
+
+networks:
+  thoughts-net:

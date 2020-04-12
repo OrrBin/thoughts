@@ -1,3 +1,4 @@
+import time
 import pika
 
 
@@ -16,7 +17,22 @@ class RabbitMQ:
         connection.close()
 
     def consume(self, topic, handler):
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self.port))
+        print(f'Trying to connect to mq({self.host}:{self.port})...')
+        connection = None
+        for i in range(1, 20):
+            try:
+                connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self.port))
+            except Exception:
+                time.sleep(1)
+                continue
+            break
+
+        if connection is None:
+            print(f'Failed to connect to mq({self.host}:{self.port})')
+            raise ConnectionError(f'Failed to connect to mq({self.host}:{self.port})')
+
+        print(f'Connected to mq({self.host}:{self.port})')
+
         channel = connection.channel()
         channel.exchange_declare(exchange=topic, exchange_type='fanout')
         result = channel.queue_declare(queue='', exclusive=True)
