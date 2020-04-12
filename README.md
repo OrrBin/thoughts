@@ -6,7 +6,7 @@
 
 Advanced System Design project : Brain computer interface
 
-##Overview
+## Overview
 Thoughts is a project that aims to simulate Brain computer interface
  which captures, parse, store and expose  user stats, such as feelings, pose and what he sees.
 The project is built in microservices architecture, and was built while taking 
@@ -53,22 +53,22 @@ is used to communicate between the microservices.
 The server saves the large data objects, like images, to disk and sends lightweight data to 
 a message queue to be consumed by `parser`s
 
-####Staring the server
+#### Staring the server
 Also relies on environment variable `MQ_URL` to connect to a message queue.
 default value is `rabbitmq://127.0.0.1:5672`.
     
     $ python -m thoughts.server run-server
 
-####Staring the server using docker (Example)
+#### Staring the server using docker (Example)
     $ docker run -p 8000:8000  --name server --network my-net -v ~/thoughts:/var/data/thoughts 
     -e MQ_URL=rabbitmq://rabit:5672 thoughts-server # using custom message queue url where rabit is the name of 
                                                     # A container runnig RabbitMQ service 
     
-###saver
+### saver
 Responsible for saving parsed data to data stores.
 Currently supported data stores are: MongoDB
 
-####Staring the saver
+#### Staring the saver
 The api relies on environment variable `DB_URL` to connect to a database.
 default value is `mongodb://127.0.0.1:27017`.
 
@@ -77,18 +77,18 @@ default value is `rabbitmq://127.0.0.1:5672`.
 
     $ python -m thoughts.persistence run-saver
 
-####Staring the saver using docker (Example)
+#### Staring the saver using docker (Example)
     $ docker run  --name saver --network my-net -v ~/thoughts:/var/data/thoughts
      -e DB_URL=mongodb://mongo:27017  
      -e MQ_URL=rabbitmq://rabit:5672 thoughts-saver # Example using custom url, where rabit is the
                                                     # name of a docker container, that runs RabitMQ service
     
-###parser
+### parser
 Each parser is responsible to parse specific part of the snapshot,
 then publish it to message queue to be consumed by a `saver`.
 Current implemented parsers: `feelings`, `pose`, `color image`, `depth image`
 
-####Staring the parser
+#### Staring the parser
 The parser relies on environment variable `PARSER` to select which parser to start.
 default value is `all` in which case all parsers would be started
  
@@ -107,7 +107,7 @@ default value is `rabbitmq://127.0.0.1:5672`.
     $ export MQ_URL=MQ_URL=rabbitmq://128.0.0.5:5672
     $ python -m thoughts.parsers run-parsers #run feelings parser, using custom message queue url
 
-####Staring the parser using docker (Examples)
+#### Staring the parser using docker (Examples)
     $ sudo docker run  --name parsers --network my-net -v ~/thoughts:/var/data/thoughts
      -e MQ_URL=rabbitmq://rabit:5672 thoughts-parsers   # starting all parsers as one container, default
                                                         # using custom message queue url where rabit is the name of 
@@ -124,10 +124,10 @@ default value is `rabbitmq://127.0.0.1:5672`.
      -e PARSER=pose -e MQ_URL=rabbitmq://rabit:5672 thoughts-parsers # starting only pose parser as one container
 
     
-###api
+### api
 Exposes REST api that exposes the data stored in the data store.
 
-####Staring the api
+#### Staring the api
 The api relies on environment variable `DB_URL` to connect to a database.
 default value is `mongodb://127.0.0.1:27017`.
     
@@ -140,30 +140,30 @@ default value is `mongodb://127.0.0.1:27017`.
    
    
 
-####Staring the api using docker (Example)
+#### Staring the api using docker (Example)
     $ docker run -p 5000:5000  --name api --network my-net -v ~/thoughts:/var/data/thoughts
      -e DB_URL=mongodb://mongo:27017 thoughts-api   # Example using custom url, where mongo is the
                                                     # name of a docker container, that runs MongoDB service 
 
-###client
+### client
 Python module that exposes one function `upload_sample` that gets 
 sample file, and uploads all snapshots from it to the `server`
  
-####Staring the client
+#### Staring the client
     python -m thoughts.client upload-sample
     
     
-###cli
+### cli
 Python module that consumes the main functions of the `api`
 
-###gui
+### gui
 Simple webservice that serves webapp. 
 Please see https://github.com/OrrBin/thoughts-website repository for more details the webapp.
 Note that the file `thoughts/gui/static/env.js` is configuration file for the webapp,
 and the variable `window.__env.apiUrl` defined the default api url.
 Update to this file are applied to the webapp without the need to restart the webservice.
 
-####Staring the gui
+#### Staring the gui
 The api relies on environment variable `API_URL` to connect to a api.
 see variable `window.__env.apiUrl` in file `thoughts/gui/static/env.js` for current api url.
 If defined, then before starting the webservice, the configuration file `thoughts/gui/static/env.js`
@@ -174,12 +174,12 @@ is updated with the provided api url
    
    
 
-####Staring the gui using docker (Example)
+#### Staring the gui using docker (Example)
     $ sudo docker run -p 5555:5555  --name gui --network my-net
      -e API_URL=http://api:5555 thoughts-gui # Example using custom url, where api is the
                                              # name of a docker container named api, that runs API service
                                              
-##Starting the whole shabang
+## Starting the whole shabang
 To start all the microservices at once, one easy command is provided: 
     
     $ ./run_pipeline.sh
@@ -190,8 +190,8 @@ to define global environment variables
  
  ##Extend the project
  
- ###Add another type of database driver
- To add support for another database driver following steps are needed:
+### Add another type of database driver
+To add support for another database driver following steps are needed:
     
     1. add a file, with name that end with db.py, for example postgresdb.py
     2. implement the driver and add prefix attribute with the specific
@@ -199,7 +199,7 @@ to define global environment variables
     3. To see the api the driver should implement see mongodb.py
     4. The driver should have a constructor accepting: host, port
  
- ###Add another type of message queue driver
+ ### Add another type of message queue driver
  To add support for another message queue following steps are needed:
     
     1. file, with name that end with mq.py
@@ -209,7 +209,7 @@ to define global environment variables
         consume(self, topic, handler)
     4. The driver should have a constructor accepting: host, port
     
- ###Add another type of parser
+ ### Add another type of parser
  To add a new type of snapshot parser:
     
     1. Add a function in the thoughts/parsers folder (at some file),
