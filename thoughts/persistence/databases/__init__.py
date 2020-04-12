@@ -14,7 +14,7 @@ def load_databases():
     It would be registered under mongodb.
 
     To add a new driver add a file, with name that end with db.py, implement the driver and add prefix attribute
-    with the specific message queue type.
+    with the specific database type.
     The driver must implement the all the functions that mongodb.py implements
 
     And have a constructor accepting: host, port

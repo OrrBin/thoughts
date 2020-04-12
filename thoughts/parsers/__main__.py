@@ -24,7 +24,7 @@ def parse(parser_name, path):
 @click.argument('parser_name')
 @click.option('--mq_url', default='rabbitmq://127.0.0.1:5672')
 def run_parser(parser_name, mq_url):
-    register_parser(parser_name, mq_url)
+    run_one_parser(parser_name, mq_url)
 
 
 @cli.command()

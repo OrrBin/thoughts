@@ -6,8 +6,16 @@
 
 Advanced System Design project : Brain computer interface
 
-## Installation
+##Overview
+Thoughts is a project that aims to simulate Brain computer interface
+ which captures, parse, store and expose  user stats, such as feelings, pose and what he sees.
+The project is built in microservices architecture, and was built while taking 
+into consideration scaling and flexibility.  
 
+Each microservice is implemented as a python package, where `utils`, `core`, `message_queues`, `persistence.databases` 
+are shared packages between the services. 
+
+## Installation
 1. Clone the repository and enter it:
 
     ```sh
@@ -24,103 +32,188 @@ Advanced System Design project : Brain computer interface
     $ source .env/bin/activate
     [thoughts] $ # you're good to go!
     ```
+   
+3. Install docker: https://docs.docker.com/engine/install/ubuntu/ 
 
-3. To check that everything is working as expected, run the tests:
+4. Install docker-compose:https://docs.docker.com/compose/install/  
 
-
-    ```sh
-    $ pytest tests/
+5. To start up the whole system at once:
+    
+    ```
+    $ ./run_pipeline.sh
     ...
     ```
+6. More on running the microservices in `Microservices` section
 
-## Usage
+## Microservices
+###server
+Listens to snapshots update requests, sent by the client.
+The server is responsible for converting the input from the client to the format that
+is used to communicate between the microservices.
+The server saves the large data objects, like images, to disk and sends lightweight data to 
+a message queue to be consumed by `parser`s
 
-The `brain` package provides the `Thought` class. 
-It also provides a `utils` sub-package, which provides a `Connection` and `Listener` classes.
-  In addition, `brain` provides the following functions:  
-
-
-- `run_server`
-
-    This function starts a server that receives thoughts.
-    It receives the following arguments:
-    - address: a tuple of consist of ip and port, i.e (ip, port), which the server would run on
-    - data: directory to save received thoguhts
+####Staring the server
+Also relies on environment variable `MQ_URL` to connect to a message queue.
+default value is `rabbitmq://127.0.0.1:5672`.
     
-    Sending SIGINT ends the connection. 
-    Usage example:
+    $ python -m thoughts.server run-server
 
-    ```pycon
-    >>> run_server((127.0.0.1, 10000), ./data)
-    # Waiting for data
-    # When data is sent in the correct format, it will be appended to ./data
-    # ^CServer terminated by user (KeyboardInterrupt)
-    ```
-
-- `upload_thought`
+####Staring the server using docker (Example)
+    $ docker run -p 8000:8000  --name server --network my-net -v ~/thoughts:/var/data/thoughts 
+    -e MQ_URL=rabbitmq://rabit:5672 thoughts-server # using custom message queue url where rabit is the name of 
+                                                    # A container runnig RabbitMQ service 
     
-    This function sends a thought to a server. It receives the following arguments:
-    - address: a tuple of consist of ip and port, i.e (ip, port), the ip of the server.
-    - user: an integer that represents the sender's id
-    - thought: a string that contains the thought
+###saver
+Responsible for saving parsed data to data stores.
+Currently supported data stores are: MongoDB
+
+####Staring the saver
+The api relies on environment variable `DB_URL` to connect to a database.
+default value is `mongodb://127.0.0.1:27017`.
+
+Also relies on environment variable `MQ_URL` to connect to a message queue.
+default value is `rabbitmq://127.0.0.1:5672`.
+
+    $ python -m thoughts.persistence run-saver
+
+####Staring the saver using docker (Example)
+    $ docker run  --name saver --network my-net -v ~/thoughts:/var/data/thoughts
+     -e DB_URL=mongodb://mongo:27017  
+     -e MQ_URL=rabbitmq://rabit:5672 thoughts-saver # Example using custom url, where rabit is the
+                                                    # name of a docker container, that runs RabitMQ service
     
-    Usage example:
+###parser
+Each parser is responsible to parse specific part of the snapshot,
+then publish it to message queue to be consumed by a `saver`.
+Current implemented parsers: `feelings`, `pose`, `color image`, `depth image`
 
-    ```pycon
-    >>> upload_thought((127.0.0.1, 10000), 1, "I'm hungry")
-    done  # when sending is complete, this message is printed 
-    ```
-  
-- `run_webserver`
+####Staring the parser
+The parser relies on environment variable `PARSER` to select which parser to start.
+default value is `all` in which case all parsers would be started
+ 
+Also relies on environment variable `MQ_URL` to connect to a message queue.
+default value is `rabbitmq://127.0.0.1:5672`.
+ 
+    $ python -m thoughts.parsers run-parsers #run all parsers
 
-    This function starts a http website, consists of list of thoughts for each user.
-    It receives the following arguments:
-    - address: a tuple of consist of ip and port, i.e (ip, port), to run the server on
-    - data: a directory that contains thoughts to be displayed on the website
+    ----------------------------------------------------------------------------------
     
-    Usage example:
-    ```pycon
-    >>> run_server((127.0.0.1, 8000), ./data)
-    ```
+    $ python -m thoughts.parsers run_parser color_image  #run color_image parser
+    
+    ----------------------------------------------------------------------------------
+    
+    $ export PARSER=feelings
+    $ export MQ_URL=MQ_URL=rabbitmq://128.0.0.5:5672
+    $ python -m thoughts.parsers run-parsers #run feelings parser, using custom message queue url
 
-The `brain` package also provides a command-line interface:
+####Staring the parser using docker (Examples)
+    $ sudo docker run  --name parsers --network my-net -v ~/thoughts:/var/data/thoughts
+     -e MQ_URL=rabbitmq://rabit:5672 thoughts-parsers   # starting all parsers as one container, default
+                                                        # using custom message queue url where rabit is the name of 
+                                                        # A container running RabbitMQ service 
+    
+    ----------------------------------------------------------------------------------
+    
+    $ sudo docker run  --name parsers --network my-net -v ~/thoughts:/var/data/thoughts
+     -e PARSER=all -e MQ_URL=rabbitmq://rabit:5672 thoughts-parsers #starting all parsers as one container
+     
+     ----------------------------------------------------------------------------------
+     
+     $ docker run  --name parsers --network my-net -v ~/thoughts:/var/data/thoughts
+     -e PARSER=pose -e MQ_URL=rabbitmq://rabit:5672 thoughts-parsers # starting only pose parser as one container
 
-```sh
-$ python -m brain
-```
+    
+###api
+Exposes REST api that exposes the data stored in the data store.
 
-The CLI provides the `run_server`, `upload_thought` and `run_webserver`, with the same arguments as above:
+####Staring the api
+The api relies on environment variable `DB_URL` to connect to a database.
+default value is `mongodb://127.0.0.1:27017`.
+    
+    $ python -m thoughts.api run-server -d mongodb://128.0.0.5:27017 #example using  custom url
+    
+    ----------------------------------------------------------------------------------
+    
+    $ export DB_URL=mongodb://128.0.0.5:27017
+    $ python -m thoughts.api run-server #example using env var to pass custom url
+   
+   
 
-```sh
-$ python -m brain run_server 127.0.0.1:10000 ./data 
-...
-$ python -m brain upload_thought 127.0.0.1:10000 1 "I'm hungry"
-done
-$ python -m brain run_webserver
-...
-```
-##############################################################################################
-from flask import Flask, send_from_directory
+####Staring the api using docker (Example)
+    $ docker run -p 5000:5000  --name api --network my-net -v ~/thoughts:/var/data/thoughts
+     -e DB_URL=mongodb://mongo:27017 thoughts-api   # Example using custom url, where mongo is the
+                                                    # name of a docker container, that runs MongoDB service 
 
-app = Flask(__name__)
+###client
+Python module that exposes one function `upload_sample` that gets 
+sample file, and uploads all snapshots from it to the `server`
+ 
+####Staring the client
+    python -m thoughts.client upload-sample
+    
+    
+###cli
+Python module that consumes the main functions of the `api`
 
+###gui
+Simple webservice that serves webapp. 
+Please see https://github.com/OrrBin/thoughts-website repository for more details the webapp.
+Note that the file `thoughts/gui/static/env.js` is configuration file for the webapp,
+and the variable `window.__env.apiUrl` defined the default api url.
+Update to this file are applied to the webapp without the need to restart the webservice.
 
-@app.route('/<path:path>', methods=['GET'])
-def static_proxy(path):
-  return send_from_directory('./', path)
+####Staring the gui
+The api relies on environment variable `API_URL` to connect to a api.
+see variable `window.__env.apiUrl` in file `thoughts/gui/static/env.js` for current api url.
+If defined, then before starting the webservice, the configuration file `thoughts/gui/static/env.js`
+is updated with the provided api url 
+    
+    $ export API_URL=http://128.0.0.5:5000
+    $ python -m thoughts.gui run-server #example using env var to pass custom url
+   
+   
 
+####Staring the gui using docker (Example)
+    $ sudo docker run -p 5555:5555  --name gui --network my-net
+     -e API_URL=http://api:5555 thoughts-gui # Example using custom url, where api is the
+                                             # name of a docker container named api, that runs API service
+                                             
+##Starting the whole shabang
+To start all the microservices at once, one easy command is provided: 
+    
+    $ ./run_pipeline.sh
 
-@app.route('/')
-def root():
-  return send_from_directory('./', 'index.html')
-
-
-if __name__ == '__main__':
-  # This is used when running locally only. When deploying use a webserver process 
-  # such as Gunicorn to serve the app.
-  app.run(host='127.0.0.1', port=8080, debug=True)
-
-
-@app.errorhandler(500)
-def server_error(e):
-  return 'An internal error occurred [main.py] %s' % e, 500
+This command depends on docker-compose so make sure it is installed.
+The file `docker-compose.yml` defines the composition, and it uses `thoughts.env`
+to define global environment variables
+ 
+ ##Extend the project
+ 
+ ###Add another type of database driver
+ To add support for another database driver following steps are needed:
+    
+    1. add a file, with name that end with db.py, for example postgresdb.py
+    2. implement the driver and add prefix attribute with the specific
+       database type, for exmpale prefix = postgres
+    3. To see the api the driver should implement see mongodb.py
+    4. The driver should have a constructor accepting: host, port
+ 
+ ###Add another type of message queue driver
+ To add support for another message queue following steps are needed:
+    
+    1. file, with name that end with mq.py
+    2. implement the driver and add prefix attribute with the specific message queue type
+    3. The api the handler must implement is:
+        publish(self, topic, message)
+        consume(self, topic, handler)
+    4. The driver should have a constructor accepting: host, port
+    
+ ###Add another type of parser
+ To add a new type of snapshot parser:
+    
+    1. Add a function in the thoughts/parsers folder (at some file),
+    2. implement the parser and add identifier attribute with the specific parser type, for example anger
+    3. The parser function must get one parameter, the snapshots bytes
+    4. The parser must return dict with one element: {identifier: value}
+       Where value is the parsed value, and identifier is the parser identifier, for exmple {anger : 0.5}
