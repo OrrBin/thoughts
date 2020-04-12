@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/OrrBin/thoughts/branch/master/graph/badge.svg)](https://codecov.io/gh/OrrBin/thoughts)
 [![Documentation Status](https://readthedocs.org/projects/thoughts/badge/?version=latest)](https://thoughts.readthedocs.io/en/latest/?badge=latest)
 
-# thoughts
+# Thoughts
 
 Advanced System Design project : Brain computer interface
 
