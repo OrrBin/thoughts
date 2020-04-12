@@ -9,7 +9,7 @@ from thoughts.core.context import Context
 from flask import Flask, request
 
 serv = Flask(__name__)
-data_dir = '/home/user/thoughts/data'
+data_dir = '/var/data/thoughts/data'
 message_handler = None
 url = None
 protobuf_encoder = ProtoBufSerializer()

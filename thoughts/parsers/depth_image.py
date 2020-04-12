@@ -7,7 +7,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-heatmaps_root_dir = '/home/user/thoughts/heatmaps'
+heatmaps_root_dir = '/var/data/thoughts/heatmaps'
 pbs = ProtoBufSerializer()
 
 

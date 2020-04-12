@@ -5,7 +5,7 @@ services:
     image: mongo
     restart: always
     volumes:
-      - ~/data:/data/db mongo
+      - ~/data:/var/data/db_mongo
     networks:
       - thoughts-net
     ports:
@@ -31,7 +31,7 @@ services:
       - "8000:8000"
     restart: always
     volumes:
-      - /home/user/thoughts/:/home/user/thoughts
+      - ~/thoughts/:/var/data/thoughts
     env_file:
       - thoughts.env
 
@@ -43,7 +43,7 @@ services:
       dockerfile: ./Dockerfile-parsers
     restart: always
     volumes:
-      - ~/thoughts:/home/user/thoughts
+      - ~/thoughts:/var/data/thoughts
     networks:
       - thoughts-net
     env_file:
@@ -58,7 +58,7 @@ services:
       dockerfile: ./Dockerfile-saver
     restart: always
     volumes:
-      - ~/thoughts:/home/user/thoughts
+      - ~/thoughts:/var/data/thoughts
     networks:
       - thoughts-net
     env_file:
@@ -72,7 +72,7 @@ services:
       dockerfile: ./Dockerfile-api
     restart: always
     volumes:
-      - ~/thoughts:/home/user/thoughts
+      - ~/thoughts:/var/data/thoughts
     networks:
       - thoughts-net
     ports:
