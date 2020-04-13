@@ -30,7 +30,7 @@ message Snapshot {
   Snapshot that contains images with the data itself.
   Meant to be sent from the client to reduce format coplexity
  */
-message EnrichedSnapshot
+message EnrichedSnapshot {
     uint64 datetime = 1;
     Pose pose = 2;
     EnrichedColorImage color_image = 3;

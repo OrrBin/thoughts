@@ -54,9 +54,10 @@ def post_snapshot():
         message_handler(message_bytes)
         return ""  # return status code 200
 
-    mq = init_queue(url)
-    mq.publish('snapshot', protobuf_encoder.snapshot_encode(snapshot))
-    mq.publish('user', _user_json(user))
+    if url:
+        mq = init_queue(url)
+        mq.publish('snapshot', protobuf_encoder.snapshot_encode(snapshot))
+        mq.publish('user', _user_json(user))
     return "Success"
 
 

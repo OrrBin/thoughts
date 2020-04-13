@@ -8,6 +8,7 @@ furl
 pymongo
 matplotlib
 numpy
+pytest_httpserver
 
 alabaster==0.7.12
 attrs==19.3.0
