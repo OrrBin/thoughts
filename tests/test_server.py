@@ -16,7 +16,7 @@ def test_server():
     process.start()
 
     print('Waiting for server to start...')
-    time.sleep(5)
+    time.sleep(10)
 
     try:
         encoder = ProtoBufSerializer()
