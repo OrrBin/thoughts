@@ -8,26 +8,27 @@ from ..message_queues import init_queue
 from thoughts.core.context import Context
 from flask import Flask, request
 
+_DATA_DIR = '/var/data/thoughts/data'
+
 serv = Flask(__name__)
-data_dir = '/var/data/thoughts/data'
+_data_dir = '/var/data/thoughts/data'
 message_handler = None
 url = None
 protobuf_encoder = ProtoBufSerializer()
 
 
-def run_server(host, port, publish=None, mq_url=None):
+def run_server(host, port, mq_url=None, data_dir=_DATA_DIR):
     """
     Runs server that accepts snapshots, and distributes them to the given message queue.
     The Server saves the heavy data to files on disk, to prevent overloading the queue and network.
-    :param publish: handler for messages. If not specified default behavior is to publish the message to the given queue
     :param mq_url: url to a message queue of a supported type
+    :param data_dir: data directory
     """
-    if publish:
-        global message_handler
-        message_handler = publish
-    else:
-        global url
-        url = mq_url
+    global _data_dir
+    _data_dir = data_dir
+
+    global url
+    url = mq_url
     serv.run(host, int(port))
 
 
@@ -41,7 +42,7 @@ def post_snapshot():
     color_image_data = enriched_snapshot.color_image.data
     depth_image_data = json.dumps(list(enriched_snapshot.depth_image.data))
 
-    context = Context(data_dir, user.user_id, snapshot_id)
+    context = Context(_data_dir, user.user_id, snapshot_id)
     color_image_path = context.save('color_image', color_image_data)
     depth_image_path = context.save('depth_image', depth_image_data)
 
@@ -49,10 +50,6 @@ def post_snapshot():
     print(f'saved depth image at: {depth_image_path}')
 
     snapshot = _flatten_snapshot(enriched_snapshot, snapshot_id, user.user_id, color_image_path, depth_image_path)
-
-    if message_handler:  # run_server was invoked through API
-        message_handler(message_bytes)
-        return ""  # return status code 200
 
     if url:
         mq = init_queue(url)

@@ -3,11 +3,11 @@ from PIL import Image
 from thoughts.core.context import Context
 from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 
-images_root_dir = '/var/data/thoughts/images'
+# images_root_dir = '/var/data/thoughts/images'
 pbs = ProtoBufSerializer()
 
 
-def parse_color_image(snapshot_bytes):
+def parse_color_image(snapshot_bytes, images_dir='/var/data/thoughts/images'):
     """
     Parsing color image data from snapshot. The image data itself is stored on disk, and the metadata returned
     """
@@ -24,7 +24,7 @@ def parse_color_image(snapshot_bytes):
         data = f.read()
     image = Image.frombytes('RGB', size, data)
 
-    ctx = Context(images_root_dir, user_id, snapshot_id)
+    ctx = Context(images_dir, user_id, snapshot_id)
     file_path = ctx.path('color_image.jpg')
     file = open(file_path, 'w+')
     image.save(file)

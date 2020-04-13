@@ -1,5 +1,7 @@
 import multiprocessing
+import shutil
 import time
+from os import path
 
 import requests
 
@@ -9,14 +11,15 @@ from thoughts.server import server
 
 _SERVER_HOST = '127.0.0.1'
 _SERVER_PORT = '8003'
+_DATA_DIR = './data'
 
 
 def test_server():
-    process = multiprocessing.Process(target=server.run_server, args=(_SERVER_HOST, _SERVER_PORT, None))
+    process = multiprocessing.Process(target=server.run_server, args=(_SERVER_HOST, _SERVER_PORT, None, _DATA_DIR))
     process.start()
 
     print('Waiting for server to start...')
-    time.sleep(10)
+    time.sleep(5)
 
     try:
         encoder = ProtoBufSerializer()
@@ -28,3 +31,5 @@ def test_server():
     finally:
         process.terminate()
         process.join()
+        if path.exists(_DATA_DIR):
+            shutil.rmtree(_DATA_DIR)
