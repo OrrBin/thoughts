@@ -6,4 +6,4 @@ EXPOSE 8000
 
 ENV MQ_URL rabbitmq://127.0.0.1:5672
 
-CMD ["python", "-m", "thoughts.server", "run-server", "-h", "0.0.0.0"]
+CMD python -m thoughts.server run-server -h 0.0.0.0 -q ${MQ_URL}

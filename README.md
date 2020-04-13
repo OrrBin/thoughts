@@ -54,12 +54,13 @@ The server saves the large data objects, like images, to disk and sends lightwei
 a message queue to be consumed by `parser`s
 
 #### Staring the server
-Also relies on environment variable `MQ_URL` to connect to a message queue.
-default value is `rabbitmq://127.0.0.1:5672`.
     
     $ python -m thoughts.server run-server
 
 #### Staring the server using docker (Example)
+When running with docker the server relies on environment variable `MQ_URL` to connect to a message queue.
+default value is `rabbitmq://127.0.0.1:5672`.
+
     $ docker run -p 8000:8000  --name server --network my-net -v ~/thoughts:/var/data/thoughts 
     -e MQ_URL=rabbitmq://rabit:5672 thoughts-server # using custom message queue url where rabit is the name of 
                                                     # A container runnig RabbitMQ service 
@@ -69,15 +70,16 @@ Responsible for saving parsed data to data stores.
 Currently supported data stores are: MongoDB
 
 #### Staring the saver
-The api relies on environment variable `DB_URL` to connect to a database.
+
+    $ python -m thoughts.persistence run-saver
+
+#### Staring the saver using docker (Example)
+When running with docker the api relies on environment variable `DB_URL` to connect to a database.
 default value is `mongodb://127.0.0.1:27017`.
 
 Also relies on environment variable `MQ_URL` to connect to a message queue.
 default value is `rabbitmq://127.0.0.1:5672`.
 
-    $ python -m thoughts.persistence run-saver
-
-#### Staring the saver using docker (Example)
     $ docker run  --name saver --network my-net -v ~/thoughts:/var/data/thoughts
      -e DB_URL=mongodb://mongo:27017  
      -e MQ_URL=rabbitmq://rabit:5672 thoughts-saver # Example using custom url, where rabit is the
@@ -89,25 +91,25 @@ then publish it to message queue to be consumed by a `saver`.
 Current implemented parsers: `feelings`, `pose`, `color image`, `depth image`
 
 #### Staring the parser
-The parser relies on environment variable `PARSER` to select which parser to start.
-default value is `all` in which case all parsers would be started
- 
-Also relies on environment variable `MQ_URL` to connect to a message queue.
-default value is `rabbitmq://127.0.0.1:5672`.
  
     $ python -m thoughts.parsers run-parsers #run all parsers
 
     ----------------------------------------------------------------------------------
     
-    $ python -m thoughts.parsers run_parser color_image  #run color_image parser
-    
+    $ python -m thoughts.parsers run-parsers -p color_image #run only color image parser
+
     ----------------------------------------------------------------------------------
     
-    $ export PARSER=feelings
-    $ export MQ_URL=MQ_URL=rabbitmq://128.0.0.5:5672
-    $ python -m thoughts.parsers run-parsers #run feelings parser, using custom message queue url
+    $ python -m thoughts.parsers run_parser color_image  #run color_image parser
+    
 
 #### Staring the parser using docker (Examples)
+When running with docker the parser relies on environment variable `PARSER` to select which parser to start.
+default value is `all` in which case all parsers would be started
+ 
+Also relies on environment variable `MQ_URL` to connect to a message queue.
+default value is `rabbitmq://127.0.0.1:5672`.
+
     $ sudo docker run  --name parsers --network my-net -v ~/thoughts:/var/data/thoughts
      -e MQ_URL=rabbitmq://rabit:5672 thoughts-parsers   # starting all parsers as one container, default
                                                         # using custom message queue url where rabit is the name of 
@@ -128,19 +130,14 @@ default value is `rabbitmq://127.0.0.1:5672`.
 Exposes REST api that exposes the data stored in the data store.
 
 #### Staring the api
-The api relies on environment variable `DB_URL` to connect to a database.
-default value is `mongodb://127.0.0.1:27017`.
     
     $ python -m thoughts.api run-server -d mongodb://128.0.0.5:27017 #example using  custom url
-    
-    ----------------------------------------------------------------------------------
-    
-    $ export DB_URL=mongodb://128.0.0.5:27017
-    $ python -m thoughts.api run-server #example using env var to pass custom url
    
    
-
 #### Staring the api using docker (Example)
+When running with docker the api relies on environment variable `DB_URL` to connect to a database.
+default value is `mongodb://127.0.0.1:27017`.
+
     $ docker run -p 5000:5000  --name api --network my-net -v ~/thoughts:/var/data/thoughts
      -e DB_URL=mongodb://mongo:27017 thoughts-api   # Example using custom url, where mongo is the
                                                     # name of a docker container, that runs MongoDB service 
@@ -163,20 +160,23 @@ Note that the file `thoughts/gui/static/env.js` is configuration file for the we
 and the variable `window.__env.apiUrl` defined the default api url.
 Update to this file are applied to the webapp without the need to restart the webservice.
 
-#### Staring the gui
-The api relies on environment variable `API_URL` to connect to a api.
+#### Staring the gui 
 see variable `window.__env.apiUrl` in file `thoughts/gui/static/env.js` for current api url.
-If defined, then before starting the webservice, the configuration file `thoughts/gui/static/env.js`
-is updated with the provided api url 
-    
-    $ export API_URL=http://128.0.0.5:5000
-    $ python -m thoughts.gui run-server #example using env var to pass custom url
+If `-a` or is passed, then before starting the webservice, the configuration file `thoughts/gui/static/env.js`
+is updated with the provided api url    
+
+    $ python -m thoughts.gui run-server -a http://128.0.0.5:5000 #example using env var to pass custom url
    
    
 
 #### Staring the gui using docker (Example)
+When running via docker, the gui relies on environment variable `API_URL` to connect to a api.
+see variable `window.__env.apiUrl` in file `thoughts/gui/static/env.js` for current api url.
+If `API_URL` is defined, then before starting the webservice, the configuration file `thoughts/gui/static/env.js`
+is updated with the provided api url
+
     $ sudo docker run -p 5555:5555  --name gui --network my-net
-     -e API_URL=http://api:5555 thoughts-gui # Example using custom url, where api is the
+     -e API_URL=http://api:5000 thoughts-gui # Example using custom url, where api is the
                                              # name of a docker container named api, that runs API service
                                              
 ## Starting the whole shabang
@@ -187,6 +187,10 @@ To start all the microservices at once, one easy command is provided:
 This command depends on docker-compose so make sure it is installed.
 The file `docker-compose.yml` defines the composition, and it uses `thoughts.env`
 to define global environment variables
+ 
+##### NOTE
+For some reason the gui fails to communicate with the api using `api` host name,
+So i use a hack, and go through the host machine, see in `thoughts.env` the `API_URL` comment for more information
  
 ## Extend the project
  

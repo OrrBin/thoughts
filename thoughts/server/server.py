@@ -45,6 +45,9 @@ def post_snapshot():
     color_image_path = context.save('color_image', color_image_data)
     depth_image_path = context.save('depth_image', depth_image_data)
 
+    print(f'saved color image at: {color_image_path}')
+    print(f'saved depth image at: {depth_image_path}')
+
     snapshot = _flatten_snapshot(enriched_snapshot, snapshot_id, user.user_id, color_image_path, depth_image_path)
 
     if message_handler:  # run_server was invoked through API

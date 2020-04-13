@@ -6,4 +6,4 @@ ADD thoughts thoughts
 ENV DB_URL mongodb://127.0.0.1:27017
 ENV MQ_URL rabbitmq://127.0.0.1:5672
 
-CMD ["python", "-m", "thoughts.persistence", "run-saver"]
+CMD python -m thoughts.persistence run-saver -q ${MQ_URL} -d ${DB_URL}

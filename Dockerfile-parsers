@@ -5,4 +5,4 @@ ADD thoughts thoughts
 
 ENV MQ_URL rabbitmq://127.0.0.1:5672
 ENV PARSER all
-CMD ["python", "-m", "thoughts.parsers", "run-parsers"]
+CMD python -m thoughts.parsers run-parsers -q ${MQ_URL} -p ${PARSER}

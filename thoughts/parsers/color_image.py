@@ -3,7 +3,7 @@ from PIL import Image
 from thoughts.core.context import Context
 from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 
-images_root_dir = '/var/data/thoughts/images'
+images_root_dir = '/vat/data/thoughts/images'
 pbs = ProtoBufSerializer()
 
 

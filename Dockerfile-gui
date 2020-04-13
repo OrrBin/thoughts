@@ -5,4 +5,4 @@ ADD thoughts thoughts
 
 ENV API_URL http://api:5000
 
-CMD ["python", "-m", "thoughts.gui", "run-server", "-h", "0.0.0.0"]
+CMD python -m thoughts.gui run-server -h 0.0.0.0 -a ${API_URL}

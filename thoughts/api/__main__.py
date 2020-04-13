@@ -14,8 +14,6 @@ def cli():
 @click.option('-p', '--port', default='5000')
 @click.option('-d', '--database', default='mongodb://127.0.0.1:27017')
 def run_server(host, port, database):
-    # If env variable is defined use it
-    database = os.getenv('DB_URL', database)
     try:
         run_api_server(host, port, database)
     except Exception as error:

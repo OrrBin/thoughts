@@ -18,14 +18,7 @@ class RabbitMQ:
 
     def consume(self, topic, handler):
         print(f'Trying to connect to mq({self.host}:{self.port})...')
-        connection = None
-        for i in range(1, 20):
-            try:
-                connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self.port))
-            except Exception:
-                time.sleep(1)
-                continue
-            break
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self.port, connection_attempts=8, retry_delay=8))
 
         if connection is None:
             print(f'Failed to connect to mq({self.host}:{self.port})')
