@@ -3,7 +3,7 @@ from PIL import Image
 from thoughts.core.context import Context
 from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 
-images_root_dir = '/vat/data/thoughts/images'
+images_root_dir = '/var/data/thoughts/images'
 pbs = ProtoBufSerializer()
 
 
@@ -19,6 +19,7 @@ def parse_color_image(snapshot_bytes):
     raw_data_path = snapshot.color_image.path
     size = snapshot.color_image.width, snapshot.color_image.height
 
+    print(f'raw_data_path: {raw_data_path}, size: {size}')
     with open(raw_data_path, 'rb') as f:
         data = f.read()
     image = Image.frombytes('RGB', size, data)
