@@ -18,7 +18,7 @@ are shared packages between the services.
 ## Installation
 1. Clone the repository and enter it:
 
-    ```sh
+    ```
     $ git clone git@github.com:OrrBin/thoughts.git
     ...
     $ cd thoughts/
@@ -26,7 +26,7 @@ are shared packages between the services.
 
 2. Run the installation script and activate the virtual environment:
 
-    ```sh
+    ```
     $ ./scripts/install.sh
     ...
     $ source .env/bin/activate
