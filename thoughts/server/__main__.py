@@ -1,6 +1,7 @@
-import os
 import click
 from thoughts.server import server
+
+_DATA_DIR = server.root_data_dir()
 
 
 @click.group()
@@ -12,10 +13,11 @@ def cli():
 @click.option('-h', '--host', default='127.0.0.1')
 @click.option('-p', '--port', default='8000')
 @click.option('-q', '--mq_url', default='rabbitmq://127.0.0.1:5672')
-def run_server(host, port, mq_url):
+@click.option('-d', '--data_dir', default=_DATA_DIR)
+def run_server(host, port, mq_url, data_dir):
     try:
         print(f'mq url is: {mq_url}')
-        server.run_server(host, port, mq_url=mq_url)
+        server.run_server(host, port, mq_url=mq_url, data_dir=data_dir)
     except Exception as error:
         print(f'ERROR: {error}')
 

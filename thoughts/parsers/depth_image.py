@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 pbs = ProtoBufSerializer()
 
 
-def parse_depth_image(snapshot_bytes, images_dir='/var/data/thoughts/heatmaps'):
+def parse_depth_image(snapshot_bytes, data_dir='/var/data/thoughts'):
     """
     Parsing depth image data from snapshot. The image data itself is stored on disk, and the metadata returned
     """
@@ -31,7 +31,7 @@ def parse_depth_image(snapshot_bytes, images_dir='/var/data/thoughts/heatmaps'):
     data = json.loads(data)
     shaped = np.reshape(data, size)
 
-    ctx = Context(images_dir, user_id, snapshot_id)
+    ctx = Context(f'{data_dir}/heatmaps', user_id, snapshot_id)
     heatmap_path = ctx.path('heatmap.png')
 
     # Plot heatmap

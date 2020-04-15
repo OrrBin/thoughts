@@ -3,7 +3,7 @@ from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 pbs = ProtoBufSerializer()
 
 
-def parse_pose(snapshot_bytes):
+def parse_pose(snapshot_bytes, data_dir='/var/data/thoughts'):
     """
     Parsing pose data from snapshot
     """

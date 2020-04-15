@@ -2,6 +2,9 @@ import click
 from . import parse as parse_data, run_one_parser
 from . import run_all_parsers
 
+from thoughts.server import server
+
+_DATA_DIR = server.root_data_dir()
 
 @click.group()
 def cli():
@@ -20,18 +23,20 @@ def parse(parser_name, path):
 @cli.command()
 @click.argument('parser')
 @click.option('--mq_url', default='rabbitmq://127.0.0.1:5672')
-def run_parser(parser, mq_url):
-    run_one_parser(parser, mq_url)
+@click.option('-d', '--data_dir', default=_DATA_DIR)
+def run_parser(parser, mq_url, data_dir):
+    run_one_parser(parser, mq_url, data_dir)
 
 
 @cli.command()
 @click.option('-p', '--parser', default='all')
 @click.option('-q', '--mq_url', default='rabbitmq://127.0.0.1:5672')
-def run_parsers(parser, mq_url):
+@click.option('-d', '--data_dir', default=_DATA_DIR)
+def run_parsers(parser, mq_url, data_dir):
     if parser == 'all':
-        run_all_parsers(mq_url)
+        run_all_parsers(mq_url, data_dir)
     else:
-        run_one_parser(parser, mq_url)
+        run_one_parser(parser, mq_url, data_dir)
 
 
 if __name__ == '__main__':

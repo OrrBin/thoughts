@@ -3,7 +3,7 @@ from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 pbs = ProtoBufSerializer()
 
 
-def parse_feelings(snapshot_bytes):
+def parse_feelings(snapshot_bytes, data_dir='/var/data/thoughts'):
     """
     Parsing feelings data from snapshot
     """

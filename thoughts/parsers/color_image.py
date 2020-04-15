@@ -4,11 +4,10 @@ from google.protobuf.message import DecodeError
 from thoughts.core.context import Context
 from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 
-# images_root_dir = '/var/data/thoughts/images'
 pbs = ProtoBufSerializer()
 
 
-def parse_color_image(snapshot_bytes, images_dir='/var/data/thoughts/images'):
+def parse_color_image(snapshot_bytes, data_dir='/var/data/thoughts'):
     """
     Parsing color image data from snapshot. The image data itself is stored on disk, and the metadata returned
     """
@@ -29,7 +28,7 @@ def parse_color_image(snapshot_bytes, images_dir='/var/data/thoughts/images'):
         data = f.read()
     image = Image.frombytes('RGB', size, data)
 
-    ctx = Context(images_dir, user_id, snapshot_id)
+    ctx = Context(f'{data_dir}/images', user_id, snapshot_id)
     file_path = ctx.path('color_image.jpg')
     file = open(file_path, 'w+')
     image.save(file)

@@ -9,7 +9,7 @@ from ..message_queues import init_queue
 from thoughts.core.context import Context
 from flask import Flask, request
 
-_DATA_DIR = '/var/data/thoughts/data'
+_DATA_DIR = '/var/data/thoughts'
 
 serv = Flask(__name__)
 _data_dir = '/var/data/thoughts/data'
@@ -18,15 +18,19 @@ url = None
 protobuf_encoder = ProtoBufSerializer()
 
 
+def root_data_dir():
+    return _DATA_DIR
+
+
 def run_server(host, port, mq_url=None, data_dir=_DATA_DIR):
     """
     Runs server that accepts snapshots, and distributes them to the given message queue.
     The Server saves the heavy data to files on disk, to prevent overloading the queue and network.
     :param mq_url: url to a message queue of a supported type
-    :param data_dir: data directory
+    :param data_dir: root directory for all data and images
     """
     global _data_dir
-    _data_dir = data_dir
+    _data_dir = f'{data_dir}/data'
 
     global url
     url = mq_url

@@ -9,6 +9,10 @@ from google.protobuf.message import DecodeError
 from thoughts.message_queues import init_queue
 from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 
+from thoughts.server import  server
+
+_DATA_DIR = server.root_data_dir()
+
 config = {}
 pbs = ProtoBufSerializer()
 
@@ -38,22 +42,23 @@ def load_parsers():
                 config[func.identifier] = func
 
 
-def parse(parser_name, raw_data):
-    return config[parser_name](raw_data)
+def parse(parser_name, raw_data, data_dir):
+    return config[parser_name](raw_data, data_dir)
 
 
-def run_parser(parser_name, mq_url):
+def run_parser(parser_name, mq_url, data_dir=_DATA_DIR):
     """
     Registering parser of the given name to listen to the message queue to incoming snapshots.
     On each incoming snapshot, running the parser, enriching it's result and publishing to message queue
     :param parser_name: parser name to run
     :param mq_url: message queue to pubkish to
+    :param data_dir: root directory for all data and images
     """
     mq = init_queue(mq_url)
 
     def handler(body):
         try:
-            result = parse(parser_name, body)
+            result = parse(parser_name, body, data_dir)
         except Exception:
             print(f'Parser {parser_name} failed to parse message')
             return
@@ -79,15 +84,15 @@ def run_parser(parser_name, mq_url):
     mq.consume('snapshot', handler)
 
 
-def run_all_parsers(mq_url):
+def run_all_parsers(mq_url, data_dir=_DATA_DIR):
     for parser_name in get_available_parsers():
-        t = Thread(target=run_parser, args=(parser_name, mq_url))
+        t = Thread(target=run_parser, args=(parser_name, mq_url, data_dir))
         t.start()
         print(f'Parser {parser_name} is activated')
 
 
-def run_one_parser(parser_name, mq_url):
-    t = Thread(target=run_parser, args=(parser_name, mq_url))
+def run_one_parser(parser_name, mq_url, data_dir=_DATA_DIR):
+    t = Thread(target=run_parser, args=(parser_name, mq_url, data_dir))
     t.start()
     print(f'Parser {parser_name} is activated')
 
