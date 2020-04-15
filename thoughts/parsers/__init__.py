@@ -31,7 +31,7 @@ def load_parsers():
     And must return dict with one element: {identifier: value}
     Where value is the parsed value, and identifier is the parser identifier
     """
-    root = Path("thoughts/parsers").absolute()
+    root = Path(__file__).parent.absolute()
     sys.path.insert(0, str(root.parent))
     for file in root.iterdir():
         if file.name.startswith('_') or not file.suffix == '.py':

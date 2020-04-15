@@ -19,7 +19,7 @@ def load_databases():
 
     And have a constructor accepting: host, port
     """
-    root = Path("thoughts/persistence/databases").absolute()
+    root = Path(__file__).parent.absolute()
     sys.path.insert(0, str(root.parent))
     for file in root.iterdir():
         if file.name.startswith('_') or not file.suffix == '.py':
