@@ -45,6 +45,26 @@ are shared packages between the services.
     ```
 6. More on running the microservices in `Microservices` section
 
+## General notes
+1. If running with default values, it is expected that the user that runs the services would have 
+permissions to create, read and write `/var/data/thoughts`
+
+2. When running `docker-compose`, currently the gui is accessing the api through the host machine via ip `172.19.0.1`.  
+   This is because for some reason accessing through the `api` name doesn't work, only for this service. 
+
+## Starting the whole shabang
+To start all the microservices at once, one easy command is provided: 
+    
+    $ ./run_pipeline.sh
+
+This command depends on docker-compose so make sure it is installed.
+The file `docker-compose.yml` defines the composition, and it uses `thoughts.env`
+to define global environment variables
+ 
+##### NOTE
+For some reason the gui fails to communicate with the api using `api` host name,
+So i use a hack, and go through the host machine, see in `thoughts.env` the `API_URL` comment for more information
+
 ## Microservices
 ###server
 Listens to snapshots update requests, sent by the client.
@@ -53,13 +73,22 @@ is used to communicate between the microservices.
 The server saves the large data objects, like images, to disk and sends lightweight data to 
 a message queue to be consumed by `parser`s
 
+The server can receive root folder to save the data to. if not given the default is `/var/data/thoughts`.
+The data would be saved in sub-folder `data` 
+
 #### Staring the server
     
-    $ python -m thoughts.server run-server
+    $ python -m thoughts.server run-server # With default values
+    
+    ----------------------------------------------------------------------------------
+    
+    $ python -m thoughts.server run-server -h 0.0.0.0 -p 8003 -d ~/thoughts # With custom values
 
 #### Staring the server using docker (Example)
 When running with docker the server relies on environment variable `MQ_URL` to connect to a message queue.
 default value is `rabbitmq://127.0.0.1:5672`.
+
+When running using docker the data is saved to the default folder `/var/data/thoughts` in the container.
 
     $ docker run -p 8000:8000  --name server --network my-net -v ~/thoughts:/var/data/thoughts 
     -e MQ_URL=rabbitmq://rabit:5672 thoughts-server # using custom message queue url where rabit is the name of 
@@ -90,6 +119,10 @@ Each parser is responsible to parse specific part of the snapshot,
 then publish it to message queue to be consumed by a `saver`.
 Current implemented parsers: `feelings`, `pose`, `color image`, `depth image`
 
+Parsers can receive root folder to save the data to. if not given the default is `/var/data/thoughts`.
+Parser should save their data sub-folder of the root data.
+For example `images` for color image or `heatmap` for depth image  
+
 #### Staring the parser
  
     $ python -m thoughts.parsers run-parsers #run all parsers
@@ -109,6 +142,8 @@ default value is `all` in which case all parsers would be started
  
 Also relies on environment variable `MQ_URL` to connect to a message queue.
 default value is `rabbitmq://127.0.0.1:5672`.
+
+When running using docker the data is saved to the default folder `/var/data/thoughts` in the container.
 
     $ sudo docker run  --name parsers --network my-net -v ~/thoughts:/var/data/thoughts
      -e MQ_URL=rabbitmq://rabit:5672 thoughts-parsers   # starting all parsers as one container, default
@@ -179,21 +214,11 @@ is updated with the provided api url
      -e API_URL=http://api:5000 thoughts-gui # Example using custom url, where api is the
                                              # name of a docker container named api, that runs API service
                                              
-## Starting the whole shabang
-To start all the microservices at once, one easy command is provided: 
-    
-    $ ./run_pipeline.sh
 
-This command depends on docker-compose so make sure it is installed.
-The file `docker-compose.yml` defines the composition, and it uses `thoughts.env`
-to define global environment variables
- 
-##### NOTE
-For some reason the gui fails to communicate with the api using `api` host name,
-So i use a hack, and go through the host machine, see in `thoughts.env` the `API_URL` comment for more information
  
 ## Extend the project
- 
+This project is meant to be easy to extend. here are some useful tips on how you can easily extend it
+
 ### Add another type of database driver
 To add support for another database driver following steps are needed:
     
@@ -216,8 +241,7 @@ To add support for another database driver following steps are needed:
  ### Add another type of parser
  To add a new type of snapshot parser:
     
-    1. Add a function in the thoughts/parsers folder (at some file),
+    1. Add a function in the thoughts/parsers folder (at some file), reciving sanpshot bytes, root data folder
     2. implement the parser and add identifier attribute with the specific parser type, for example anger
-    3. The parser function must get one parameter, the snapshots bytes
-    4. The parser must return dict with one element: {identifier: value}
+    3. The parser must return dict with one element: {identifier: value}
        Where value is the parsed value, and identifier is the parser identifier, for exmple {anger : 0.5}
