@@ -17,14 +17,11 @@ class RabbitMQ:
         connection.close()
 
     def consume(self, topic, handler):
-        print(f'Trying to connect to mq({self.host}:{self.port})...')
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self.port, connection_attempts=8, retry_delay=8))
 
         if connection is None:
             print(f'Failed to connect to mq({self.host}:{self.port})')
             raise ConnectionError(f'Failed to connect to mq({self.host}:{self.port})')
-
-        print(f'Connected to mq({self.host}:{self.port})')
 
         channel = connection.channel()
         channel.exchange_declare(exchange=topic, exchange_type='fanout')

@@ -12,7 +12,7 @@ from thoughts.server import server
 
 _SERVER_HOST = '127.0.0.1'
 _SERVER_PORT = '8003'
-_DATA_DIR = './data'
+_DATA_DIR = './test-data'
 
 
 @pytest.fixture(scope="module")
@@ -31,7 +31,6 @@ def init_server():
 
 
 def test_server(init_server):
-    # try:
     encoder = ProtoBufSerializer()
     address = f'http://{_SERVER_HOST}:{_SERVER_PORT}/snapshot'
     for (user, snapshot) in get_test_messages():

@@ -23,7 +23,7 @@ def test_parse_color_image():
         serializer = ProtoBufSerializer()
         snapshot_bytes = bytes(serializer.snapshot_encode(snapshot))
 
-        result = parse_color_image(snapshot_bytes, images_dir=_IMAGES_DIR)
+        result = parse_color_image(snapshot_bytes, data_dir=_IMAGES_DIR)
 
         result = result['color_image']
         assert result['width'] == snapshot.color_image.width
@@ -41,7 +41,7 @@ def test_parse_color_image():
 
 def test_parse_color_image_bad_snapshot():
     try:
-        parse_color_image(b'bad snapshot', images_dir=_IMAGES_DIR)
+        parse_color_image(b'bad snapshot', data_dir=_IMAGES_DIR)
     except DecodeError:
         pass
 
@@ -51,7 +51,7 @@ def test_parse_depth_image():
         serializer = ProtoBufSerializer()
         snapshot_bytes = bytes(serializer.snapshot_encode(snapshot))
 
-        result = parse_depth_image(snapshot_bytes, images_dir=_IMAGES_DIR)
+        result = parse_depth_image(snapshot_bytes, data_dir=_IMAGES_DIR)
 
         result = result['depth_image']
         assert result['width'] == snapshot.depth_image.width
@@ -67,7 +67,7 @@ def test_parse_depth_image():
 
 def test_parse_depth_image_bad_snapshot():
     try:
-        parse_depth_image(b'bad snapshot', images_dir=_IMAGES_DIR)
+        parse_depth_image(b'bad snapshot', data_dir=_IMAGES_DIR)
     except DecodeError:
         pass
 
