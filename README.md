@@ -68,7 +68,7 @@ For some reason the gui fails to communicate with the api using `api` host name,
 So i use a hack, and go through the host machine, see in `thoughts.env` the `API_URL` comment for more information
 
 ## Microservices
-###server
+### server
 Listens to snapshots update requests, sent by the client.
 The server is responsible for converting the input from the client to the format that
 is used to communicate between the microservices.
