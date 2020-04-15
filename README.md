@@ -45,6 +45,8 @@ are shared packages between the services.
     ```
 6. More on running the microservices in `Microservices` section
 
+7. See The repository https://github.com/OrrBin/thoughts-website for GUI
+
 ## General notes
 1. If running with default values, it is expected that the user that runs the services would have 
 permissions to create, read and write `/var/data/thoughts`
