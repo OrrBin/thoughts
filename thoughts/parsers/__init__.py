@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 from threading import Thread
 
+from google.protobuf.message import DecodeError
+
 from thoughts.message_queues import init_queue
 from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
 
@@ -50,9 +52,18 @@ def run_parser(parser_name, mq_url):
     mq = init_queue(mq_url)
 
     def handler(body):
-        result = parse(parser_name, body)
+        try:
+            result = parse(parser_name, body)
+        except Exception:
+            print(f'Parser {parser_name} failed to parse message')
+            return
 
-        snapshot = pbs.snapshot_decode(body)
+        try:
+            snapshot = pbs.snapshot_decode(body)
+        except DecodeError as e:
+            print(e)
+            return
+
         result = dict(
             snapshot_id=snapshot.snapshot_id,
             user_id=snapshot.user_id,

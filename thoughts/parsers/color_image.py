@@ -1,4 +1,5 @@
 from PIL import Image
+from google.protobuf.message import DecodeError
 
 from thoughts.core.context import Context
 from thoughts.utils.serializers.protobuf_serializer import ProtoBufSerializer
@@ -11,7 +12,11 @@ def parse_color_image(snapshot_bytes, images_dir='/var/data/thoughts/images'):
     """
     Parsing color image data from snapshot. The image data itself is stored on disk, and the metadata returned
     """
-    snapshot = pbs.snapshot_decode(snapshot_bytes)
+    try:
+        snapshot = pbs.snapshot_decode(snapshot_bytes)
+    except DecodeError as e:
+        print(e)
+        raise e
 
     user_id = snapshot.user_id
     snapshot_id = snapshot.snapshot_id

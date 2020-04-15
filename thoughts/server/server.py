@@ -1,4 +1,5 @@
 import json
+import struct
 import uuid
 
 from ..core.thoughts_pb2 import Snapshot
@@ -35,7 +36,12 @@ def run_server(host, port, mq_url=None, data_dir=_DATA_DIR):
 @serv.route('/snapshot', methods=['POST'])
 def post_snapshot():
     message_bytes = request.get_data()
-    user, enriched_snapshot = protobuf_encoder.message_decode(message_bytes)  # convert from bytes to pb objects
+    try:
+        user, enriched_snapshot = protobuf_encoder.message_decode(message_bytes)  # convert from bytes to pb objects
+    except ValueError as e:
+        error_message = f'encountered error while decoding message: {e}'
+        print(error_message)
+        return error_message, 400
 
     snapshot_id = _create_id()
 

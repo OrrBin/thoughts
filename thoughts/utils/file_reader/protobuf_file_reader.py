@@ -22,13 +22,7 @@ class ProtobufFileReader:
         if not data or len(data) == 0:
             return None
 
-        # try:
         size, = struct.unpack('I', data)
-        # except Exception as e:
-        #     track = traceback.format_exc()
-        #     print(track)
-        #     return None
-
         return self.stream.read(size)
 
     def get_user_information(self):

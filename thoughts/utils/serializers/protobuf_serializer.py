@@ -1,5 +1,8 @@
 import struct
 import io
+
+from google.protobuf.message import DecodeError
+
 from thoughts.core.thoughts_pb2 import User
 from thoughts.core.thoughts_pb2 import Snapshot, EnrichedSnapshot
 
@@ -10,7 +13,10 @@ class ProtoBufSerializer:
 
     def user_decode(self, user_bytes):
         user = User()
-        user.ParseFromString(user_bytes)
+        try:
+            user.ParseFromString(user_bytes)
+        except DecodeError as e:
+            raise DecodeError(f'Encountered error while decoding user: {e}')
         return user
 
     def snapshot_encode(self, snapshot):
@@ -18,7 +24,10 @@ class ProtoBufSerializer:
 
     def snapshot_decode(self, snapshot_bytes):
         snapshot = Snapshot()
-        snapshot.ParseFromString(snapshot_bytes)
+        try:
+            snapshot.ParseFromString(snapshot_bytes)
+        except DecodeError as e:
+            raise DecodeError(f'Encountered error while decoding snapshot: {e}')
         return snapshot
 
     def enriched_snapshot_encode(self, snapshot):
@@ -38,12 +47,25 @@ class ProtoBufSerializer:
 
     def message_decode(self, message_bytes):
         stream = io.BytesIO(message_bytes)
-        user_len, = struct.unpack('I', stream.read(4))
-        user_bytes = stream.read(user_len)
-        snapshot_len, = struct.unpack('I', stream.read(4))
-        snapshot_bytes = stream.read(snapshot_len)
+        try:
+            user_len, = struct.unpack('I', stream.read(4))
+            user_bytes = stream.read(user_len)
+        except struct.error:
+            raise ValueError('Bad message format, could not unpack user')
 
-        user = self.user_decode(user_bytes)
-        snapshot = self.enriched_snapshot_decode(snapshot_bytes)
+        try:
+            snapshot_len, = struct.unpack('I', stream.read(4))
+            snapshot_bytes = stream.read(snapshot_len)
+        except struct.error:
+            raise ValueError('Bad message format, could not unpack snapshot')
+
+        try:
+            user = self.user_decode(user_bytes)
+        except DecodeError:
+            raise ValueError('Bad message format, could not decode user')
+        try:
+            snapshot = self.enriched_snapshot_decode(snapshot_bytes)
+        except DecodeError:
+            raise ValueError('Bad message format, could not decode snapshot')
 
         return [user, snapshot]

@@ -32,7 +32,7 @@ def upload_sample(host, port, path="sample.mind.gz"):
     except KeyboardInterrupt:
         print(f'Got termination signal')
     except Exception as e:
-        print(f'Error encountered')
+        print(f'Error encountered: {e}')
         raise e
 
     print(f'{success_count} snapshots was sent successfully, {fail_count} failed to send')
