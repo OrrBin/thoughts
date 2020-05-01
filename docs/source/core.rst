@@ -1,10 +1,10 @@
-thoughts.core package
+core package
 =====================
 
 Submodules
 ----------
 
-thoughts.core.context module
+core.context module
 ----------------------------
 
 .. automodule:: thoughts.core.context
@@ -12,7 +12,7 @@ thoughts.core.context module
    :undoc-members:
    :show-inheritance:
 
-thoughts.core.thoughts\_pb2 module
+core.thoughts\_pb2 module
 ----------------------------------
 
 .. automodule:: thoughts.core.thoughts_pb2

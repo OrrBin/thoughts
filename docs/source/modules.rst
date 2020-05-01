@@ -7,8 +7,10 @@ thoughts
     api
     cli
     client
-    drivers
+    core
     gui
+    message_queues
     parsers
-    saver
+    persistence
     server
+    utils
