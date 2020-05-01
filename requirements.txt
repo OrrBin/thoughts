@@ -9,6 +9,8 @@ pymongo
 matplotlib
 numpy
 pytest_httpserver
+sphinx-click
+sphinx_rtd_theme
 
 alabaster==0.7.12
 attrs==19.3.0
