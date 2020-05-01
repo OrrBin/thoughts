@@ -10,11 +10,17 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+from pathlib import Path
+
+
 import os
 import sys
 # sys.path.insert(0, os.path.abspath('.'))
+# sys.path.insert(0, os.path.abspath('../../thoughts'))
 sys.path.insert(0, os.path.abspath('../../thoughts'))
-
+thoughts_base = Path(__file__).parent.parent.parent.absolute()
+sys.path.insert(0, thoughts_base)
+sys.path.insert(0, os.path.abspath('../../'))
 
 # -- Project information -----------------------------------------------------
 
