@@ -4,5 +4,13 @@ thoughts
 .. toctree::
    :maxdepth: 4
 
-   setup
-   thoughts
+    api
+    cli
+    client
+    core
+    gui
+    message_queues
+    parsers
+    persistence
+    server
+    utils

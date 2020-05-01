@@ -1,10 +1,10 @@
-thoughts.parsers package
+parsers package
 ========================
 
 Submodules
 ----------
 
-thoughts.parsers.color\_image module
+parsers.color\_image module
 ------------------------------------
 
 .. automodule:: thoughts.parsers.color_image
@@ -12,7 +12,7 @@ thoughts.parsers.color\_image module
    :undoc-members:
    :show-inheritance:
 
-thoughts.parsers.depth\_image module
+parsers.depth\_image module
 ------------------------------------
 
 .. automodule:: thoughts.parsers.depth_image
@@ -20,7 +20,7 @@ thoughts.parsers.depth\_image module
    :undoc-members:
    :show-inheritance:
 
-thoughts.parsers.feelings module
+parsers.feelings module
 --------------------------------
 
 .. automodule:: thoughts.parsers.feelings
@@ -28,19 +28,10 @@ thoughts.parsers.feelings module
    :undoc-members:
    :show-inheritance:
 
-thoughts.parsers.pose module
+parsers.pose module
 ----------------------------
 
 .. automodule:: thoughts.parsers.pose
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: thoughts.parsers
    :members:
    :undoc-members:
    :show-inheritance:
