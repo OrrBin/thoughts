@@ -4,5 +4,11 @@ thoughts
 .. toctree::
    :maxdepth: 4
 
-   setup
-   thoughts
+    api
+    cli
+    client
+    drivers
+    gui
+    parsers
+    saver
+    server
